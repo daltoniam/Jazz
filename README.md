@@ -28,7 +28,8 @@ Jazz(0.25, delay: 1.0, animation: {
 
 ## TODOs
 
-- [ ] Add Example Project
+- [ ] Add extra convenience animation tools.
+- [ ] Add example project
 - [ ] Complete Docs
 - [ ] Add Unit Tests
 
