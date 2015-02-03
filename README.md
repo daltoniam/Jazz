@@ -13,13 +13,13 @@ self.view.addSubview(view)
 //play those animations!
 Jazz(0.25, delay: 1.0, animation: {
     view.frame = CGRectMake(165, 165, 100, 100)
-}).play(0.25, delay: 0,animation: {
+}).play(0.25, animation: {
     view.frame = CGRectMake(115, 115, 200, 200)
-}).play(0.25, delay: 0,animation: {
+}).play(0.25, animation: {
     view.frame = CGRectMake(65, 65, 100, 100)
 }).done({
     println("just proving things can be done inbetween animations...")
-}).play(0.25, delay: 0,animation: {
+}).play(0.25, animation: {
     view.frame = CGRectMake(85, 85, 100, 100)
 }).done({
     println("or after they finish")
