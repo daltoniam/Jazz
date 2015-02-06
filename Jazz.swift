@@ -76,6 +76,11 @@ public class Jazz {
         }
     }
     
+    //convert the degress to radians
+    class func degreesToRadians(degrees: CGFloat) -> CGFloat {
+        return degrees * CGFloat(M_PI) / 180;
+    }
+    
     ///Public class methods to manipulate views
     
     ///Change the frame of a view
@@ -107,17 +112,50 @@ public class Jazz {
         updateFrame(view, x: x, y: y, width: w, height: h)
     }
     
+    //rotate the view
+    class func rotateView(view: UIView, degrees: CGFloat) {
+        view.transform = CGAffineTransformRotate(view.transform, degreesToRadians(degrees));
+    }
+    
     ///Just some builtin convenience animations
-    public func bounce(height: CGFloat, delay: NSTimeInterval = 0, view: UIView) -> Jazz {
+    
+    ///Attention getter by making the view bounce up and down
+    public func bounce(view: UIView, height: CGFloat, delay: NSTimeInterval = 0) -> Jazz {
         let length: NSTimeInterval = 0.20 + NSTimeInterval(height*0.001)
         self.play(length, delay: delay, animation: {
             Jazz.moveView(view, x: view.frame.origin.x, y: view.frame.origin.y-height)
         }).play(length, animation: {
             Jazz.moveView(view, x: view.frame.origin.x, y: view.frame.origin.y+height)
-        }).play(length/1.2, animation: {
-            Jazz.moveView(view, x: view.frame.origin.x, y: view.frame.origin.y-(height/2))
         }).play(length/2, animation: {
+            Jazz.moveView(view, x: view.frame.origin.x, y: view.frame.origin.y-(height/2))
+        }).play(length/4, animation: {
             Jazz.moveView(view, x: view.frame.origin.x, y: view.frame.origin.y+(height/2))
+        })
+        return self
+    }
+    
+    ///pulse the view by scaling the view up then back down
+    public func pulse(view: UIView, length: NSTimeInterval = 0.5, delay: NSTimeInterval = 0) -> Jazz {
+        self.play(length, delay: delay, animation: {
+            Jazz.expandView(view, scale: 1.1)
+        }).play(length, delay: 0.1, animation: {
+            Jazz.expandView(view, scale: 0.9)
+        })
+        return self
+    }
+    
+    ///fade the view in using the alpha property
+    public func fadeIn(view: UIView, length: NSTimeInterval = 1.5, delay: NSTimeInterval = 0) -> Jazz {
+        self.play(length, delay: delay, animation: {
+            view.alpha = 1
+        })
+        return self
+    }
+    
+    ///fade the view out using the alpha property
+    public func fadeOut(view: UIView, length: NSTimeInterval = 1, delay: NSTimeInterval = 0) -> Jazz {
+        self.play(length, delay: delay, animation: {
+            view.alpha = 0
         })
         return self
     }
