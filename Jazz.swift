@@ -62,7 +62,7 @@ public class Jazz {
             self.doFinish()
         } else {
             UIView.animateWithDuration(current.length, delay: current.delay, usingSpringWithDamping: current.damping, initialSpringVelocity: current.velocity,
-                options: .TransitionNone, animations: current.animation, { (Bool) in
+                options: .TransitionNone, animations: current.animation, completion: { (Bool) in
                     self.doFinish()
             })
         }
