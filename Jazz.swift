@@ -1,46 +1,58 @@
 //
-//  Jazz.swift
+//  Animator.swift
 //
-//  Created by Dalton Cherry on 1/30/15.
+//  Created by Dalton Cherry on 3/10/15.
 //  Copyright (c) 2015 Vluxe. All rights reserved.
 //
 
 import UIKit
 
-class PendingAnim {
-    let length: NSTimeInterval
-    let delay: NSTimeInterval
-    let damping: CGFloat
-    let velocity: CGFloat
-    let animation: ((Void) -> Void)
-    var isDone = false
+public enum CurveType {
+    case Linear
+    case EaseIn
+    case EaseOut
+    case EaseInOut
+}
+
+public protocol AnimationProtocol {
+    //create the animations that are to be preformed for this change to the layer
+    func doAnimations(duration: Double, delay: Double, type: CurveType) -> Void
     
-    init(_ length: NSTimeInterval, _ delay: NSTimeInterval = 0, _ springDamping: CGFloat = 1, _ velocity: CGFloat = 1, _ animation: ((Void) -> Void)) {
-        self.length = length
+    //finish the animation. Normally this means call drawPath() or the method that updates the layer
+    func finishAnimation(Void) -> Void
+}
+
+class Pending {
+    let duration: Double
+    let delay: Double
+    let animations: ((Void) -> Array<AnimationProtocol>)
+    var done: ((Void) -> Void)?
+    let type: CurveType
+    
+    init(_ duration: Double, _ delay: Double = 0, _ type: CurveType = .Linear, _ animations: ((Void) -> Array<AnimationProtocol>)) {
+        self.duration = duration
         self.delay = delay
-        self.damping = springDamping
-        self.velocity = velocity
-        self.animation = animation
+        self.animations = animations
+        self.type = type
     }
 }
 
 public class Jazz {
-    
-    private var pending = Array<PendingAnim>()
+    private var pending = Array<Pending>()
     
     //convenience that starts the running
-    public convenience init(_ length: NSTimeInterval, delay: NSTimeInterval = 0, springDamping: CGFloat = 1, velocity: CGFloat = 1, animation: ((Void) -> Void)) {
+    public convenience init(_ duration: Double = 0.25, delay: Double = 0, type: CurveType = .Linear, animations: ((Void) -> Array<AnimationProtocol>)) {
         self.init()
-        play(length, delay: delay, springDamping: springDamping, velocity: velocity, animation: animation)
+        play(duration, delay: delay, type: type, animations: animations)
     }
     
     //queue some animations
-    public func play(length: NSTimeInterval, delay: NSTimeInterval = 0, springDamping: CGFloat = 1, velocity: CGFloat = 1, animation:((Void) -> Void)) -> Jazz {
+    public func play(_ duration: Double = 0.25, delay: Double = 0, type: CurveType = .Linear, animations: ((Void) -> Array<AnimationProtocol>)) -> Jazz {
         var should = false
         if self.pending.count == 0 {
             should = true
         }
-        self.pending.append(PendingAnim(length,delay,springDamping,velocity,animation))
+        self.pending.append(Pending(duration,delay,.Linear,animations))
         if should {
             start(self.pending[0])
         }
@@ -49,22 +61,90 @@ public class Jazz {
     
     //An animation finished running
     public func done(work:((Void) -> Void)) -> Jazz {
-        let anim = PendingAnim(0,0,1,1,work)
-        anim.isDone = true
+        let anim = Pending(0,0,.Linear,{return []})
+        anim.done = work
         self.pending.append(anim)
         return self
     }
     
+    //turn a CurveType into the corresponding UIViewAnimationOptions
+    class public func valueForView(type: CurveType) -> UIViewAnimationOptions {
+        switch type {
+        case .EaseIn: return .CurveEaseIn
+        case .EaseInOut: return .CurveEaseInOut
+        case .EaseOut: return .CurveEaseOut
+        default: return .CurveLinear
+        }
+    }
+    
+    //turn a CurveType into the corresponding UIViewAnimationCurve
+    class public func valueForCurve(type: CurveType) -> UIViewAnimationCurve {
+        switch type {
+        case .EaseIn: return .EaseIn
+        case .EaseInOut: return .EaseInOut
+        case .EaseOut: return .EaseOut
+        default: return .Linear
+        }
+    }
+    
+    //turn a CurveType into the corresponding MediaTiming
+    class public func valueForTiming(type: CurveType) -> String {
+        switch type {
+        case .EaseIn: return kCAMediaTimingFunctionEaseIn
+        case .EaseInOut: return kCAMediaTimingFunctionEaseInEaseOut
+        case .EaseOut: return kCAMediaTimingFunctionEaseOut
+        default: return kCAMediaTimingFunctionLinear
+        }
+    }
+    
+    //create a basic animation from the standard properties
+    class public func createAnimation(duration: Double, delay: Double, type: CurveType, key: String) -> CABasicAnimation {
+        var animation = CABasicAnimation(keyPath: key)
+        animation.duration = duration
+        animation.beginTime = CACurrentMediaTime() + delay
+        animation.timingFunction = CAMediaTimingFunction(name: Jazz.valueForTiming(type))
+        animation.fillMode = kCAFillModeForwards
+        animation.removedOnCompletion = false
+        return animation
+    }
+    
+    //creates a random key that is for a single animation
+    class public func oneShotKey() -> String {
+        let letters = "abcdefghijklmnopqurstuvwxyz"
+        var str = ""
+        for var i = 0; i < 14; i++ {
+            let start = Int(arc4random() % 14)
+            str.append(letters[advance(letters.startIndex,start)])
+        }
+        return "\(Jazz.animPrefix())\(str)"
+    }
+    
+    //the prefix to identify the animations to remove on completion
+    class public func animPrefix() -> String {
+        return "vluxe"
+    }
+    
     //private method that actually runs the animation
-    private func start(current: PendingAnim) {
-        if current.isDone {
-            current.animation()
+    private func start(current: Pending) {
+        if let d = current.done {
+            d()
             self.doFinish()
         } else {
-            UIView.animateWithDuration(current.length, delay: current.delay, usingSpringWithDamping: current.damping, initialSpringVelocity: current.velocity,
-                options: .TransitionNone, animations: current.animation, completion: { (Bool) in
-                    self.doFinish()
-            })
+            UIView.beginAnimations(nil, context: nil)
+            UIView.setAnimationDelay(current.delay)
+            UIView.setAnimationDuration(current.duration)
+            UIView.setAnimationCurve(Jazz.valueForCurve(current.type))
+            let views = current.animations()
+            CATransaction.setCompletionBlock {
+                for view in views {
+                    view.finishAnimation()
+                }
+                self.doFinish()
+            }
+            for view in views {
+                view.doAnimations(current.duration, delay: current.delay, type: current.type)
+            }
+            UIView.commitAnimations()
         }
     }
     
@@ -75,89 +155,4 @@ public class Jazz {
             self.start(self.pending[0])
         }
     }
-    
-    //convert the degress to radians
-    class func degreesToRadians(degrees: CGFloat) -> CGFloat {
-        return degrees * CGFloat(M_PI) / 180;
-    }
-    
-    ///Public class methods to manipulate views
-    
-    ///Change the frame of a view
-    class func updateFrame(view :UIView, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) {
-        var frame = view.frame
-        frame.origin.x = x
-        frame.origin.y = y
-        frame.size.width = width
-        frame.size.height = height
-        view.frame = frame
-    }
-    
-    //move the view around
-    class func moveView(view :UIView, x: CGFloat, y: CGFloat) {
-        updateFrame(view, x: x, y: y, width: view.frame.size.width, height: view.frame.size.height)
-    }
-    
-    //change the size of the view
-    class func resizeView(view :UIView, width: CGFloat, height: CGFloat) {
-        updateFrame(view, x: view.frame.origin.x, y: view.frame.origin.y, width: width, height: height)
-    }
-    
-    //expand the size of the view
-    class func expandView(view :UIView, scale: CGFloat) {
-        let w = view.frame.size.width*scale
-        let h = view.frame.size.height*scale
-        let x = view.frame.origin.x - (w - view.frame.size.width)/2
-        let y = view.frame.origin.y - (h - view.frame.size.height)/2
-        updateFrame(view, x: x, y: y, width: w, height: h)
-    }
-    
-    //rotate the view
-    class func rotateView(view: UIView, degrees: CGFloat) {
-        view.transform = CGAffineTransformRotate(view.transform, degreesToRadians(degrees));
-    }
-    
-    ///Just some builtin convenience animations
-    
-    ///Attention getter by making the view bounce up and down
-    public func bounce(view: UIView, height: CGFloat, delay: NSTimeInterval = 0) -> Jazz {
-        let length: NSTimeInterval = 0.20 + NSTimeInterval(height*0.001)
-        self.play(length, delay: delay, animation: {
-            Jazz.moveView(view, x: view.frame.origin.x, y: view.frame.origin.y-height)
-        }).play(length, animation: {
-            Jazz.moveView(view, x: view.frame.origin.x, y: view.frame.origin.y+height)
-        }).play(length/2, animation: {
-            Jazz.moveView(view, x: view.frame.origin.x, y: view.frame.origin.y-(height/2))
-        }).play(length/4, animation: {
-            Jazz.moveView(view, x: view.frame.origin.x, y: view.frame.origin.y+(height/2))
-        })
-        return self
-    }
-    
-    ///pulse the view by scaling the view up then back down
-    public func pulse(view: UIView, length: NSTimeInterval = 0.5, delay: NSTimeInterval = 0) -> Jazz {
-        self.play(length, delay: delay, animation: {
-            Jazz.expandView(view, scale: 1.1)
-        }).play(length, delay: 0.1, animation: {
-            Jazz.expandView(view, scale: 0.9)
-        })
-        return self
-    }
-    
-    ///fade the view in using the alpha property
-    public func fadeIn(view: UIView, length: NSTimeInterval = 1.5, delay: NSTimeInterval = 0) -> Jazz {
-        self.play(length, delay: delay, animation: {
-            view.alpha = 1
-        })
-        return self
-    }
-    
-    ///fade the view out using the alpha property
-    public func fadeOut(view: UIView, length: NSTimeInterval = 1, delay: NSTimeInterval = 0) -> Jazz {
-        self.play(length, delay: delay, animation: {
-            view.alpha = 0
-        })
-        return self
-    }
-    
 }
