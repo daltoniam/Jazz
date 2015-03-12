@@ -110,8 +110,7 @@ public class Button: Shape {
         }
         if ripple {
             drawRipple(recognizer)
-        }
-        if let handler = tapHandler {
+        } else if let handler = tapHandler {
             handler()
         }
     }
@@ -130,7 +129,7 @@ public class Button: Shape {
             self.shapeLayer.addSublayer(rip)
             self.addSubview(self.textLabel)
         }
-        let dur = 0.5
+        let dur = 0.3
         var animation = Jazz.createAnimation(dur, delay: 0, type: .Linear, key: "opacity")
         animation.fromValue = 0.8
         animation.toValue = 0
@@ -142,6 +141,9 @@ public class Button: Shape {
             self.rippleLayer?.removeFromSuperlayer()
             self.rippleLayer?.removeAnimationForKey(fadeKey)
             self.rippleLayer?.removeAnimationForKey(moveKey)
+            if let handler = self.tapHandler {
+                handler()
+            }
         }
         rippleLayer?.addAnimation(animation, forKey: fadeKey)
         rippleLayer?.addAnimation(move, forKey: moveKey)

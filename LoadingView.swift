@@ -45,7 +45,7 @@ public class LoadingView: UIView, AnimationProtocol {
     
     //start the loading animation
     public func start(speed: Double = 1.2) {
-        drawPath()
+        //drawPath()
         runLoading(speed)
     }
     
