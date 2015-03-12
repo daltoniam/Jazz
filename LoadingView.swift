@@ -18,10 +18,11 @@ public class LoadingView: UIView, AnimationProtocol {
     public var startPoint: CGFloat {
         set{
             point = newValue
-            self.transform = CGAffineTransformRotate(CGAffineTransformIdentity,LoadingView.degreesToRadians(newValue))
+            Jazz.rotateView(self, degrees: newValue)
         }
         get{return point}
     }
+    private var stopped = false
     private let startKey = "startKey"
     private let endKey = "endKey"
     
@@ -36,14 +37,28 @@ public class LoadingView: UIView, AnimationProtocol {
     
     //setup the properties
     func commonInit() {
+        self.userInteractionEnabled = false
         self.startPoint = 270
         self.shapeLayer = self.layer as CAShapeLayer
         self.backgroundColor = UIColor.clearColor()
     }
     
+    //start the loading animation
     public func start(speed: Double = 1.2) {
+        drawPath()
+        runLoading(speed)
+    }
+    
+    //run the loading animation
+    private func runLoading(speed: Double) {
         shapeLayer.removeAnimationForKey(startKey)
         shapeLayer.removeAnimationForKey(endKey)
+        if stopped {
+            stopped = false
+            self.progress = 0
+            drawPath()
+            return
+        }
         
         var startAnim = Jazz.createAnimation(speed, delay: speed/1.7, type: .EaseInOut, key: "strokeStart")
         startAnim.fromValue = self.shapeLayer.strokeStart
@@ -59,6 +74,26 @@ public class LoadingView: UIView, AnimationProtocol {
             self.start(speed: speed)
         }
         shapeLayer.addAnimation(startAnim, forKey: startKey)
+        shapeLayer.addAnimation(animation, forKey: endKey)
+        CATransaction.commit()
+    }
+    
+    //stop the loading
+    public func stop() {
+        stopped = true
+    }
+    
+    //animate the progress
+    public func animateProgress(speed: Double = 1.2,progress: CGFloat) {
+        var animation = Jazz.createAnimation(speed, delay: 0, type: .EaseInOut, key: "strokeEnd")
+        animation.fromValue = self.progress
+        animation.toValue = progress
+        CATransaction.begin()
+        CATransaction.setCompletionBlock {
+            self.progress = progress
+            self.shapeLayer.removeAnimationForKey(self.endKey)
+            self.drawPath()
+        }
         shapeLayer.addAnimation(animation, forKey: endKey)
         CATransaction.commit()
     }
@@ -112,11 +147,6 @@ public class LoadingView: UIView, AnimationProtocol {
         var path = UIBezierPath(ovalInRect: fr)
         shapeLayer.strokeEnd = pro
         return path
-    }
-    
-    //get the angle
-    class func degreesToRadians(degrees: CGFloat) -> CGFloat {
-        return ((3.14159265359 * degrees)/180)
     }
     
     //update the shape from the properties

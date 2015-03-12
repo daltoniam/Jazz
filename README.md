@@ -4,25 +4,46 @@ Simple and clean animation handling in Swift.
 
 ## Example
 
+See the examples directory for pretty example projects.
+
+![](gif here)
+
 ```swift
 //Create a view in a view controller
-let view = UIView(frame: CGRectMake(65, 65, 100, 100))
-view.backgroundColor = UIColor.redColor()
-self.view.addSubview(view)
+
+//add a shape view to the view controller 
+let shape = Shape(frame: CGRectMake(10, 80, 250, 50))
+shape.color = UIColor(red: 253/255.0, green: 56/255.0, blue: 105/255.0, alpha: 1)
+shape.cornerRadius = 25
+shape.corners = UIRectCorner.AllCorners
+shape.autoresizingMask = .FlexibleHeight | .FlexibleWidth
+self.view.addSubview(shape)
 
 //play those animations!
-Jazz(0.25, delay: 1.0, animation: {
-    view.frame = CGRectMake(165, 165, 100, 100)
-}).play(0.25, animation: {
-    view.frame = CGRectMake(115, 115, 200, 200)
-}).play(0.25, animation: {
-    view.frame = CGRectMake(65, 65, 100, 100)
-}).done({
-    println("just proving things can be done inbetween animations...")
-}).play(0.25, animation: {
-    view.frame = CGRectMake(85, 85, 100, 100)
-}).done({
-    println("or after they finish")
+Jazz(0.25, delay: 2.00, {
+    let width: CGFloat = 300
+    self.shape.frame = CGRectMake((self.view.frame.size.width-width)/2, 80, width, 50)
+    self.shape.borderWidth = 3
+    self.shape.borderColor = UIColor.orangeColor()
+    self.shape.color = UIColor.redColor()
+    return [self.shape]
+}).play(0.25, delay: 2.00, {
+    let width: CGFloat = 100
+    self.shape.frame = CGRectMake((self.view.frame.size.width-width)/2, 80, width, 50)
+    self.shape.color = UIColor.purpleColor()
+    return [self.shape]
+}).play(0.25, delay: 4.00, {
+    self.shape.borderWidth = 0
+    self.shape.borderColor = nil
+    self.shape.cornerRadius = 0
+    self.shape.color = UIColor.yellowColor()
+    self.shape.frame = CGRectMake(10, 80, 250, 100)
+    return [self.shape]
+}).play(0.25, delay: 2.00, {
+    self.shape.cornerRadius = 50
+    self.shape.frame = CGRectMake(10, 80, 100, 100)
+    self.shape.color = UIColor.blueColor()
+    return [self.shape]
 })
 ```
 

@@ -155,4 +155,46 @@ public class Jazz {
             self.start(self.pending[0])
         }
     }
+    
+    //built in handy animations
+    
+    ///Public class methods to manipulate views
+    
+    ///Change the frame of a view
+    public class func updateFrame(view :UIView, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) {
+        var frame = view.frame
+        frame.origin.x = x
+        frame.origin.y = y
+        frame.size.width = width
+        frame.size.height = height
+        view.frame = frame
+    }
+    
+    //move the view around
+    public class func moveView(view :UIView, x: CGFloat, y: CGFloat) {
+        updateFrame(view, x: x, y: y, width: view.frame.size.width, height: view.frame.size.height)
+    }
+    
+    //change the size of the view
+    public class func resizeView(view :UIView, width: CGFloat, height: CGFloat) {
+        updateFrame(view, x: view.frame.origin.x, y: view.frame.origin.y, width: width, height: height)
+    }
+    
+    //expand the size of the view
+    public class func expandView(view :UIView, scale: CGFloat) {
+        let w = view.frame.size.width*scale
+        let h = view.frame.size.height*scale
+        let x = view.frame.origin.x - (w - view.frame.size.width)/2
+        let y = view.frame.origin.y - (h - view.frame.size.height)/2
+        updateFrame(view, x: x, y: y, width: w, height: h)
+    }
+    
+    //rotate the view
+    public class func rotateView(view: UIView, degrees: CGFloat) {
+        view.transform = CGAffineTransformRotate(view.transform, degreesToRadians(degrees));
+    }
+    
+    public class func degreesToRadians(degrees: CGFloat) -> CGFloat {
+        return ((3.14159265359 * degrees)/180)
+    }
 }
