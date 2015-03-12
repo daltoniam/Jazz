@@ -1,0 +1,423 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5CC9A5471AB1FA700060F3AD /* Jazz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CC9A53B1AB1FA6F0060F3AD /* Jazz.framework */; };
+		5CC9A55B1AB1FAF10060F3AD /* JazzTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A5591AB1FAF10060F3AD /* JazzTests.swift */; };
+		5CC9A5601AB1FB3C0060F3AD /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A55C1AB1FB3C0060F3AD /* Button.swift */; };
+		5CC9A5611AB1FB3C0060F3AD /* Jazz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A55D1AB1FB3C0060F3AD /* Jazz.swift */; };
+		5CC9A5621AB1FB3C0060F3AD /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A55E1AB1FB3C0060F3AD /* LoadingView.swift */; };
+		5CC9A5631AB1FB3C0060F3AD /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A55F1AB1FB3C0060F3AD /* Shape.swift */; };
+		5CC9A5671AB1FCAC0060F3AD /* Jazz.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CC9A5661AB1FCAC0060F3AD /* Jazz.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5CC9A5481AB1FA700060F3AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5CC9A5321AB1FA6F0060F3AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5CC9A53A1AB1FA6F0060F3AD;
+			remoteInfo = Jazz;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		5CC9A53B1AB1FA6F0060F3AD /* Jazz.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Jazz.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CC9A5461AB1FA700060F3AD /* JazzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JazzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CC9A5581AB1FAF10060F3AD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5CC9A5591AB1FAF10060F3AD /* JazzTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JazzTests.swift; sourceTree = "<group>"; };
+		5CC9A55C1AB1FB3C0060F3AD /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = SOURCE_ROOT; };
+		5CC9A55D1AB1FB3C0060F3AD /* Jazz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Jazz.swift; sourceTree = SOURCE_ROOT; };
+		5CC9A55E1AB1FB3C0060F3AD /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = SOURCE_ROOT; };
+		5CC9A55F1AB1FB3C0060F3AD /* Shape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = SOURCE_ROOT; };
+		5CC9A5641AB1FC9F0060F3AD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
+		5CC9A5661AB1FCAC0060F3AD /* Jazz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Jazz.h; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5CC9A5371AB1FA6F0060F3AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CC9A5431AB1FA6F0060F3AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CC9A5471AB1FA700060F3AD /* Jazz.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5CC9A5311AB1FA6F0060F3AD = {
+			isa = PBXGroup;
+			children = (
+				5CC9A53D1AB1FA6F0060F3AD /* Jazz */,
+				5CC9A5571AB1FAF10060F3AD /* Tests */,
+				5CC9A53C1AB1FA6F0060F3AD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5CC9A53C1AB1FA6F0060F3AD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5CC9A53B1AB1FA6F0060F3AD /* Jazz.framework */,
+				5CC9A5461AB1FA700060F3AD /* JazzTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5CC9A53D1AB1FA6F0060F3AD /* Jazz */ = {
+			isa = PBXGroup;
+			children = (
+				5CC9A55C1AB1FB3C0060F3AD /* Button.swift */,
+				5CC9A55D1AB1FB3C0060F3AD /* Jazz.swift */,
+				5CC9A55E1AB1FB3C0060F3AD /* LoadingView.swift */,
+				5CC9A55F1AB1FB3C0060F3AD /* Shape.swift */,
+				5CC9A5661AB1FCAC0060F3AD /* Jazz.h */,
+				5CC9A53E1AB1FA6F0060F3AD /* Supporting Files */,
+			);
+			path = Jazz;
+			sourceTree = "<group>";
+		};
+		5CC9A53E1AB1FA6F0060F3AD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5CC9A5641AB1FC9F0060F3AD /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5CC9A5571AB1FAF10060F3AD /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				5CC9A5581AB1FAF10060F3AD /* Info.plist */,
+				5CC9A5591AB1FAF10060F3AD /* JazzTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		5CC9A5381AB1FA6F0060F3AD /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CC9A5671AB1FCAC0060F3AD /* Jazz.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		5CC9A53A1AB1FA6F0060F3AD /* Jazz */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5CC9A5511AB1FA700060F3AD /* Build configuration list for PBXNativeTarget "Jazz" */;
+			buildPhases = (
+				5CC9A5361AB1FA6F0060F3AD /* Sources */,
+				5CC9A5371AB1FA6F0060F3AD /* Frameworks */,
+				5CC9A5381AB1FA6F0060F3AD /* Headers */,
+				5CC9A5391AB1FA6F0060F3AD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Jazz;
+			productName = Jazz;
+			productReference = 5CC9A53B1AB1FA6F0060F3AD /* Jazz.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		5CC9A5451AB1FA6F0060F3AD /* JazzTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5CC9A5541AB1FA700060F3AD /* Build configuration list for PBXNativeTarget "JazzTests" */;
+			buildPhases = (
+				5CC9A5421AB1FA6F0060F3AD /* Sources */,
+				5CC9A5431AB1FA6F0060F3AD /* Frameworks */,
+				5CC9A5441AB1FA6F0060F3AD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5CC9A5491AB1FA700060F3AD /* PBXTargetDependency */,
+			);
+			name = JazzTests;
+			productName = JazzTests;
+			productReference = 5CC9A5461AB1FA700060F3AD /* JazzTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5CC9A5321AB1FA6F0060F3AD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = Vluxe;
+				TargetAttributes = {
+					5CC9A53A1AB1FA6F0060F3AD = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					5CC9A5451AB1FA6F0060F3AD = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 5CC9A5351AB1FA6F0060F3AD /* Build configuration list for PBXProject "Jazz" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 5CC9A5311AB1FA6F0060F3AD;
+			productRefGroup = 5CC9A53C1AB1FA6F0060F3AD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5CC9A53A1AB1FA6F0060F3AD /* Jazz */,
+				5CC9A5451AB1FA6F0060F3AD /* JazzTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5CC9A5391AB1FA6F0060F3AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CC9A5441AB1FA6F0060F3AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5CC9A5361AB1FA6F0060F3AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CC9A5611AB1FB3C0060F3AD /* Jazz.swift in Sources */,
+				5CC9A5601AB1FB3C0060F3AD /* Button.swift in Sources */,
+				5CC9A5621AB1FB3C0060F3AD /* LoadingView.swift in Sources */,
+				5CC9A5631AB1FB3C0060F3AD /* Shape.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CC9A5421AB1FA6F0060F3AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CC9A55B1AB1FAF10060F3AD /* JazzTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5CC9A5491AB1FA700060F3AD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5CC9A53A1AB1FA6F0060F3AD /* Jazz */;
+			targetProxy = 5CC9A5481AB1FA700060F3AD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		5CC9A54F1AB1FA700060F3AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		5CC9A5501AB1FA700060F3AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		5CC9A5521AB1FA700060F3AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		5CC9A5531AB1FA700060F3AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		5CC9A5551AB1FA700060F3AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5CC9A5561AB1FA700060F3AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5CC9A5351AB1FA6F0060F3AD /* Build configuration list for PBXProject "Jazz" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CC9A54F1AB1FA700060F3AD /* Debug */,
+				5CC9A5501AB1FA700060F3AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5CC9A5511AB1FA700060F3AD /* Build configuration list for PBXNativeTarget "Jazz" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CC9A5521AB1FA700060F3AD /* Debug */,
+				5CC9A5531AB1FA700060F3AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5CC9A5541AB1FA700060F3AD /* Build configuration list for PBXNativeTarget "JazzTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CC9A5551AB1FA700060F3AD /* Debug */,
+				5CC9A5561AB1FA700060F3AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5CC9A5321AB1FA6F0060F3AD /* Project object */;
+}
