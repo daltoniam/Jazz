@@ -69,20 +69,17 @@ Jazz works with iOS 7 or above. It is recommended to use iOS 8/10.10 or above fo
 
 ## Installation
 
-### [CocoaPods](http://cocoapods.org/)
+### Cocoapods
 
-To use Jazz in your project add the following 'Podfile' to your project
+Check out [Get Started](http://cocoapods.org/) tab on [cocoapods.org](http://cocoapods.org/).
 
-    source 'https://github.com/CocoaPods/Specs.git'
+To use SwiftHTTP in your project add the following 'Podfile' to your project
 
-    xcodeproj 'YourProjectName.xcodeproj'
-    platform :ios, '8.0'
+	source 'https://github.com/CocoaPods/Specs.git'
+	platform :ios, '8.0'
+	use_frameworks!
 
-    pod 'Jazz', :git => "https://github.com/daltoniam/jazz.git", :tag => "0.9.1"
-
-    target 'YourProjectNameTests' do
-        pod 'Jazz', :git => "https://github.com/daltoniam/jazz.git", :tag => "0.9.1"
-    end
+	pod 'Jazz', '~> 0.9.1'
 
 Then run:
 
