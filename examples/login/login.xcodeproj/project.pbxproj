@@ -7,16 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C4DA4EA1AC6057800EAAF4D /* EndController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4DA4E91AC6057800EAAF4D /* EndController.swift */; };
 		5CC9A5831AB224030060F3AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A5821AB224030060F3AD /* AppDelegate.swift */; };
 		5CC9A5851AB224030060F3AD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A5841AB224030060F3AD /* ViewController.swift */; };
 		5CC9A5881AB224030060F3AD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CC9A5861AB224030060F3AD /* Main.storyboard */; };
 		5CC9A58A1AB224030060F3AD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CC9A5891AB224030060F3AD /* Images.xcassets */; };
 		5CC9A58D1AB224030060F3AD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CC9A58B1AB224030060F3AD /* LaunchScreen.xib */; };
 		5CC9A5991AB224030060F3AD /* loginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A5981AB224030060F3AD /* loginTests.swift */; };
-		5CC9A5AD1AB224820060F3AD /* Jazz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CC9A5A81AB224670060F3AD /* Jazz.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5C4DA4F01AC70CD400EAAF4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5C4DA4EB1AC70CD400EAAF4D /* Jazz.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5CC9A53B1AB1FA6F0060F3AD;
+			remoteInfo = Jazz;
+		};
+		5C4DA4F21AC70CD400EAAF4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5C4DA4EB1AC70CD400EAAF4D /* Jazz.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5CC9A5461AB1FA700060F3AD;
+			remoteInfo = JazzTests;
+		};
 		5CC9A5931AB224030060F3AD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5CC9A5751AB224020060F3AD /* Project object */;
@@ -24,30 +38,11 @@
 			remoteGlobalIDString = 5CC9A57C1AB224030060F3AD;
 			remoteInfo = login;
 		};
-		5CC9A5A71AB224670060F3AD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5CC9A5A21AB224670060F3AD /* Jazz.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5CC9A53B1AB1FA6F0060F3AD;
-			remoteInfo = Jazz;
-		};
-		5CC9A5A91AB224670060F3AD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5CC9A5A21AB224670060F3AD /* Jazz.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5CC9A5461AB1FA700060F3AD;
-			remoteInfo = JazzTests;
-		};
-		5CC9A5AB1AB2247D0060F3AD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5CC9A5A21AB224670060F3AD /* Jazz.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 5CC9A53A1AB1FA6F0060F3AD;
-			remoteInfo = Jazz;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C4DA4E91AC6057800EAAF4D /* EndController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndController.swift; sourceTree = "<group>"; };
+		5C4DA4EB1AC70CD400EAAF4D /* Jazz.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Jazz.xcodeproj; path = ../../Jazz.xcodeproj; sourceTree = "<group>"; };
 		5CC9A57D1AB224030060F3AD /* login.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = login.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CC9A5811AB224030060F3AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5CC9A5821AB224030060F3AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -58,7 +53,6 @@
 		5CC9A5921AB224030060F3AD /* loginTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = loginTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CC9A5971AB224030060F3AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5CC9A5981AB224030060F3AD /* loginTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginTests.swift; sourceTree = "<group>"; };
-		5CC9A5A21AB224670060F3AD /* Jazz.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Jazz.xcodeproj; path = ../../Jazz.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +60,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5CC9A5AD1AB224820060F3AD /* Jazz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,10 +73,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C4DA4EC1AC70CD400EAAF4D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5C4DA4F11AC70CD400EAAF4D /* Jazz.framework */,
+				5C4DA4F31AC70CD400EAAF4D /* JazzTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		5CC9A5741AB224020060F3AD = {
 			isa = PBXGroup;
 			children = (
-				5CC9A5A21AB224670060F3AD /* Jazz.xcodeproj */,
+				5C4DA4EB1AC70CD400EAAF4D /* Jazz.xcodeproj */,
 				5CC9A57F1AB224030060F3AD /* login */,
 				5CC9A5951AB224030060F3AD /* loginTests */,
 				5CC9A57E1AB224030060F3AD /* Products */,
@@ -104,6 +106,7 @@
 			children = (
 				5CC9A5821AB224030060F3AD /* AppDelegate.swift */,
 				5CC9A5841AB224030060F3AD /* ViewController.swift */,
+				5C4DA4E91AC6057800EAAF4D /* EndController.swift */,
 				5CC9A5861AB224030060F3AD /* Main.storyboard */,
 				5CC9A5891AB224030060F3AD /* Images.xcassets */,
 				5CC9A58B1AB224030060F3AD /* LaunchScreen.xib */,
@@ -137,15 +140,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		5CC9A5A31AB224670060F3AD /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5CC9A5A81AB224670060F3AD /* Jazz.framework */,
-				5CC9A5AA1AB224670060F3AD /* JazzTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -160,7 +154,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				5CC9A5AC1AB2247D0060F3AD /* PBXTargetDependency */,
 			);
 			name = login;
 			productName = login;
@@ -216,8 +209,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 5CC9A5A31AB224670060F3AD /* Products */;
-					ProjectRef = 5CC9A5A21AB224670060F3AD /* Jazz.xcodeproj */;
+					ProductGroup = 5C4DA4EC1AC70CD400EAAF4D /* Products */;
+					ProjectRef = 5C4DA4EB1AC70CD400EAAF4D /* Jazz.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -229,18 +222,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		5CC9A5A81AB224670060F3AD /* Jazz.framework */ = {
+		5C4DA4F11AC70CD400EAAF4D /* Jazz.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Jazz.framework;
-			remoteRef = 5CC9A5A71AB224670060F3AD /* PBXContainerItemProxy */;
+			remoteRef = 5C4DA4F01AC70CD400EAAF4D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5CC9A5AA1AB224670060F3AD /* JazzTests.xctest */ = {
+		5C4DA4F31AC70CD400EAAF4D /* JazzTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = JazzTests.xctest;
-			remoteRef = 5CC9A5A91AB224670060F3AD /* PBXContainerItemProxy */;
+			remoteRef = 5C4DA4F21AC70CD400EAAF4D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -271,6 +264,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CC9A5851AB224030060F3AD /* ViewController.swift in Sources */,
+				5C4DA4EA1AC6057800EAAF4D /* EndController.swift in Sources */,
 				5CC9A5831AB224030060F3AD /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -290,11 +284,6 @@
 			isa = PBXTargetDependency;
 			target = 5CC9A57C1AB224030060F3AD /* login */;
 			targetProxy = 5CC9A5931AB224030060F3AD /* PBXContainerItemProxy */;
-		};
-		5CC9A5AC1AB2247D0060F3AD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Jazz;
-			targetProxy = 5CC9A5AB1AB2247D0060F3AD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
