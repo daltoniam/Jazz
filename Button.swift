@@ -68,7 +68,7 @@ public class Button: Shape {
     }
     
     //process touches to known when to highlight the button
-    override public func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override public func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         super.touchesBegan(touches, withEvent: event)
         if enabled {
             highlighted = true
@@ -77,7 +77,7 @@ public class Button: Shape {
     }
     
     //touch ended, remove hightlight
-    override public func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+    public override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         super.touchesEnded(touches, withEvent: event)
         if enabled {
             highlighted = false
@@ -86,7 +86,7 @@ public class Button: Shape {
     }
     
     //touch cancelled, remove hightlight
-    override public func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
+    public override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
         super.touchesCancelled(touches, withEvent: event)
         if enabled {
             highlighted = false

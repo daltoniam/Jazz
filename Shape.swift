@@ -27,7 +27,7 @@ public class Shape: UIView, AnimationProtocol {
     
     //setup the properties
     func commonInit() {
-        self.shapeLayer = self.layer as CAShapeLayer
+        self.shapeLayer = self.layer as! CAShapeLayer
         self.backgroundColor = UIColor.clearColor()
     }
     

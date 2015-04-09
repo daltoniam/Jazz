@@ -39,7 +39,7 @@ public class LoadingView: UIView, AnimationProtocol {
     func commonInit() {
         self.userInteractionEnabled = false
         self.startPoint = 270
-        self.shapeLayer = self.layer as CAShapeLayer
+        self.shapeLayer = self.layer as! CAShapeLayer
         self.backgroundColor = UIColor.clearColor()
     }
     
