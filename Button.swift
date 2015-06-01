@@ -19,7 +19,6 @@ public class Button: Shape {
     }
     public var ripple = false
     private var tapHandler: ((Void) -> Void)?
-    private var rippleLayer: CAShapeLayer?
     
     //standard view init method
     override public init(frame: CGRect) {
@@ -29,6 +28,10 @@ public class Button: Shape {
     //standard view init method
     required public init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    public override init(layout: ShapePath) {
+        super.init(layout: layout)
     }
     
     //setup the properties
@@ -50,15 +53,6 @@ public class Button: Shape {
     //handle when the button is tapped
     public func didTap(handler: ((Void) -> Void)) {
         tapHandler = handler
-    }
-    
-    public override func doAnimations(duration: Double, delay: Double, type: CurveType) {
-        super.doAnimations(duration, delay: delay, type: type)
-        var animation = CATransition()
-        animation.timingFunction = CAMediaTimingFunction(name: Jazz.valueForTiming(type))
-        animation.type = kCATransitionFade
-        animation.duration = duration
-        self.textLabel.layer.addAnimation(animation, forKey: Jazz.oneShotKey())
     }
     
     //layout the subviews
@@ -117,36 +111,33 @@ public class Button: Shape {
     
     //draw the ripple effect on the button
     func drawRipple(recognizer: UITapGestureRecognizer) {
-        let fadeKey = "fade"
-        let moveKey = "move"
-        rippleLayer = rippleLayer ?? CAShapeLayer()
+        let rippleLayer = CAShapeLayer()
         let point = recognizer.locationInView(self)
         let p: CGFloat = self.frame.size.height
-        if let rip = rippleLayer {
-            rip.fillColor = self.highlightColor?.CGColor
-            rip.path = UIBezierPath(roundedRect: CGRectMake(point.x-(p/2), point.y-(p/2), p, p), cornerRadius: self.cornerRadius).CGPath
-            rip.opacity = 0.8
-            self.shapeLayer.addSublayer(rip)
-            self.addSubview(self.textLabel)
-        }
+        rippleLayer.fillColor = self.highlightColor?.CGColor
+        rippleLayer.path = UIBezierPath(roundedRect: CGRectMake(point.x-(p/2), point.y-(p/2), p, p), cornerRadius: p/2).CGPath
+        rippleLayer.opacity = 0.8
+        self.shapeLayer.addSublayer(rippleLayer)
+        self.addSubview(self.textLabel)
+        
         let dur = 0.3
-        var animation = Jazz.createAnimation(dur, delay: 0, type: .Linear, key: "opacity")
+        var animation = Jazz.createAnimation(duration: dur, key: "opacity")
         animation.fromValue = 0.8
         animation.toValue = 0
-        var move = Jazz.createAnimation(dur/2, delay: 0, type: .Linear, key: "path")
-        move.fromValue = rippleLayer?.path
-        move.toValue = self.shapeLayer.path
+        var move = Jazz.createAnimation(duration: dur, key: "path")
+        move.fromValue = rippleLayer.path
+        move.toValue = shapeLayer.path
         CATransaction.begin()
         CATransaction.setCompletionBlock {
-            self.rippleLayer?.removeFromSuperlayer()
-            self.rippleLayer?.removeAnimationForKey(fadeKey)
-            self.rippleLayer?.removeAnimationForKey(moveKey)
+            rippleLayer.removeFromSuperlayer()
             if let handler = self.tapHandler {
                 handler()
             }
         }
-        rippleLayer?.addAnimation(animation, forKey: fadeKey)
-        rippleLayer?.addAnimation(move, forKey: moveKey)
+        rippleLayer.addAnimation(animation, forKey: Jazz.oneShotKey())
+        rippleLayer.addAnimation(move, forKey: Jazz.oneShotKey())
+        rippleLayer.opacity = 0
+        rippleLayer.path = shapeLayer.path
         CATransaction.commit()
     }
 }

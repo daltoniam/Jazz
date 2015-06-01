@@ -7,72 +7,44 @@
 
 import UIKit
 
-public class Shape: UIView, AnimationProtocol {
+public class ShapePath {
+    var bezier: UIBezierPath
+    var radius: CGFloat
+    var rect: CGRect
+    var corners: UIRectCorner
+    public var frame: CGRect{ return self.rect}
+    public var borderWidth: CGFloat{ return self.bezier.lineWidth}
+    public var path: CGPath {return self.bezier.CGPath}
+    public var cornerRadius: CGFloat {return self.radius}
     
-    public var borderWidth: CGFloat = 0.0 //the width of the shape's border
-    public var borderColor: UIColor? //the color of the shape's border
-    public var corners = UIRectCorner.allZeros //which corners to round of the shape
-    public var color: UIColor? //the color of the shape
-    public var cornerRadius: CGFloat = 0.0 //the rounding of the shape
-    public var shapeLayer: CAShapeLayer! //the layer that represents the view's shape layer
-    
-    override public init(frame: CGRect) {
-        super.init(frame: frame)
-        commonInit()
-    }
-    required public init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        commonInit()
-    }
-    
-    //setup the properties
-    func commonInit() {
-        self.shapeLayer = self.layer as! CAShapeLayer
-        self.backgroundColor = UIColor.clearColor()
-    }
-    
-    //implement the animations
-    public func doAnimations(duration: Double, delay: Double, type: CurveType) {
-        var animation = Jazz.createAnimation(duration, delay: delay, type: type, key: "path")
-        animation.fromValue = shapeLayer.path
-        animation.toValue = buildPath(self.frame, corners: self.corners, radius: self.cornerRadius, borWidth: self.borderWidth).CGPath
-        shapeLayer.addAnimation(animation, forKey: Jazz.oneShotKey())
-        
-        var fill = Jazz.createAnimation(duration, delay: delay, type: type, key: "fillColor")
-        fill.fromValue = shapeLayer.fillColor
-        fill.toValue = self.color?.CGColor
-        shapeLayer.addAnimation(fill, forKey: Jazz.oneShotKey())
-        
-        var bColor = Jazz.createAnimation(duration, delay: delay, type: type, key: "borderColor")
-        bColor.fromValue = shapeLayer.borderColor
-        bColor.toValue = self.borderColor?.CGColor
-        shapeLayer.addAnimation(bColor, forKey: Jazz.oneShotKey())
-        
-        var bWidth = Jazz.createAnimation(duration, delay: delay, type: type, key: "borderWidth")
-        bWidth.fromValue = shapeLayer.borderWidth
-        bWidth.toValue = self.borderWidth
-        shapeLayer.addAnimation(bWidth, forKey: Jazz.oneShotKey())
-        
-        var corRad = Jazz.createAnimation(duration, delay: delay, type: type, key: "cornerRadius")
-        corRad.fromValue = shapeLayer.cornerRadius
-        corRad.toValue = self.cornerRadius
-        shapeLayer.addAnimation(corRad, forKey: Jazz.oneShotKey())
-    }
-    
-    //finished the animation and set the shape into its final state
-    public func finishAnimation(Void) {
-        drawPath()
-        let keys = self.shapeLayer.animationKeys()
-        for key in keys {
-            if let k = key as? String {
-                if k.hasPrefix(Jazz.animPrefix()) {
-                    self.shapeLayer.removeAnimationForKey(k)
-                }
-            }
+    //frame is the frame of the shape
+    //corners is which corners on the shape to round (bottom left, top right, etc)
+    //radius is the radius to round the corners (e.g. 4px)
+    //borderWidth is the width of border to make
+    public init(frame: CGRect, corners: UIRectCorner = UIRectCorner.allZeros, cornerRadius: CGFloat = 0.0, borderWidth: CGFloat = 0.0 ) {
+        self.rect = frame
+        self.corners = corners
+        var r = cornerRadius
+        if r <= 0 {
+            r = 0.01
         }
+        radius = r
+        let pad: CGFloat = 1
+        var fr = frame
+        fr.size.width = floor(frame.size.width-(pad*2))
+        fr.size.height = floor(frame.size.height-(pad*2))
+        fr.origin.x = pad
+        fr.origin.y = pad
+        bezier = UIBezierPath(roundedRect: fr, byRoundingCorners: corners, cornerRadii: CGSizeMake(r, r))
+        bezier.lineWidth = borderWidth
+        bezier.closePath()
     }
     
-    //creates the shapes path
+    //create a new ShapePath with an updated frame
+    public func newFrame(frame: CGRect) -> ShapePath {
+        return ShapePath(frame: frame, corners: self.corners, cornerRadius: self.cornerRadius, borderWidth: self.borderWidth)
+    }
+    
     func buildPath(rect: CGRect, corners: UIRectCorner, radius: CGFloat, borWidth: CGFloat) -> UIBezierPath {
         var r = radius
         if r <= 0 {
@@ -89,20 +61,118 @@ public class Shape: UIView, AnimationProtocol {
         path.closePath()
         return path
     }
+}
+
+public class Shape: UIView {
+    public var shapeLayer: CAShapeLayer! //the layer that represents the view's shape layer
+    
+    //layout is the values the create the layer's path
+    public var layout: ShapePath {
+        didSet {
+            self.frame = self.layout.frame
+        }
+        
+    }
+    //the color of the shape's border
+    public var borderColor: UIColor? {
+        didSet {
+            doBorderColor()
+        }
+    }
+    
+    //the color of the shape
+    public var color: UIColor? {
+        didSet {
+            doFillColor()
+        }
+    }
+    
+    //do the layout updates when the frame updates
+    override public var frame: CGRect {
+        didSet {
+            if !CGRectEqualToRect(frame, self.layout.rect) {
+                self.layout = self.layout.newFrame(frame)
+            } else {
+                doLayoutAnimation()
+            }
+        }
+    }
+    
+    override public init(frame: CGRect) {
+        self.layout = ShapePath(frame: frame, corners: UIRectCorner.allZeros, cornerRadius: 0, borderWidth: 0)
+        super.init(frame: frame)
+        commonInit()
+    }
+    required public init(coder aDecoder: NSCoder) {
+        self.layout = ShapePath(frame: CGRectZero, corners: UIRectCorner.allZeros, cornerRadius: 0, borderWidth: 0)
+        super.init(coder: aDecoder)
+        commonInit()
+    }
+    
+    public init(layout: ShapePath) {
+        self.layout = layout
+        super.init(frame: self.layout.frame)
+        commonInit()
+    }
+    
+    //setup the properties
+    func commonInit() {
+        self.shapeLayer = self.layer as! CAShapeLayer
+        self.backgroundColor = UIColor.clearColor()
+        drawPath()
+    }
+    
+    //do that frame layout animation!
+    func doLayoutAnimation() {
+        if let layer = shapeLayer {
+            var animation = Jazz.createAnimation(key: "path")
+            animation.fromValue = layer.path
+            animation.toValue = layout.path
+            layer.addAnimation(animation, forKey: Jazz.oneShotKey())
+            layer.path = layout.path
+            
+            var bAnimation = Jazz.createAnimation(key: "borderWidth")
+            bAnimation.fromValue = shapeLayer.borderWidth
+            bAnimation.toValue = layout.borderWidth
+            layer.addAnimation(bAnimation, forKey: Jazz.oneShotKey())
+            layer.borderWidth = layout.borderWidth
+        }
+    }
+    
+    //do that fill color
+    func doFillColor() {
+        if let layer = shapeLayer {
+            var animation = Jazz.createAnimation(key: "fillColor")
+            animation.fromValue = layer.fillColor
+            animation.toValue = color?.CGColor
+            layer.addAnimation(animation, forKey: Jazz.oneShotKey())
+            layer.fillColor = color?.CGColor
+        }
+    }
+    
+    //do the border color
+    func doBorderColor() {
+        if let layer = shapeLayer {
+            let dur = CATransaction.animationDuration()
+            var animation = Jazz.createAnimation(key: "borderColor")
+            animation.fromValue = layer.borderColor
+            animation.toValue = borderColor?.CGColor
+            layer.addAnimation(animation, forKey: Jazz.oneShotKey())
+            layer.borderColor = borderColor?.CGColor
+        }
+    }
+    
+    //the animations have finished
+    override public func animationDidStop(anim: CAAnimation!, finished: Bool) {
+    }
     
     //update the shape from the properties
     func drawPath() {
         shapeLayer.fillColor = self.color?.CGColor
-        shapeLayer.borderWidth = self.borderWidth
         shapeLayer.borderColor = self.borderColor?.CGColor
-        shapeLayer.cornerRadius = self.cornerRadius
-        shapeLayer.path = buildPath(self.bounds, corners: self.corners, radius: self.cornerRadius, borWidth: self.borderWidth).CGPath
-    }
-    
-    //draw the path
-    public override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
-        drawPath()
+        shapeLayer.borderWidth = self.layout.borderWidth
+        shapeLayer.cornerRadius = self.layout.cornerRadius
+        shapeLayer.path = self.layout.path
     }
     
     //set the layer of this view to be a shape

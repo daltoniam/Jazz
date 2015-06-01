@@ -28,38 +28,29 @@ The code:
 //Shape is a view in a view controller
 
 //add a shape view to the view controller 
-let shape = Shape(frame: CGRectMake(10, 80, 250, 50))
+let shape = Shape(layout: ShapePath(frame: CGRectMake(10, 80, 250, 50), corners: .AllCorners, cornerRadius: 25, borderWidth: 0))
 shape.color = UIColor(red: 253/255.0, green: 56/255.0, blue: 105/255.0, alpha: 1)
-shape.cornerRadius = 25
-shape.corners = UIRectCorner.AllCorners
 shape.autoresizingMask = .FlexibleHeight | .FlexibleWidth
 self.view.addSubview(shape)
 
 //play those animations!
-Jazz(0.25, delay: 2.00, {
+Jazz(0.25, animations: {
     let width: CGFloat = 300
-    self.shape.frame = CGRectMake((self.view.frame.size.width-width)/2, 80, width, 50)
-    self.shape.borderWidth = 3
+    self.shape.layout = ShapePath(frame: CGRectMake((self.view.frame.size.width-width)/2, corners: .AllCorners, cornerRadius: 25, borderWidth: 3)
     self.shape.borderColor = UIColor.orangeColor()
     self.shape.color = UIColor.redColor()
-    return [self.shape]
-}).play(0.25, delay: 2.00, {
+}).delay(2).play(0.25, animations: {
     let width: CGFloat = 100
     self.shape.frame = CGRectMake((self.view.frame.size.width-width)/2, 80, width, 50)
     self.shape.color = UIColor.purpleColor()
-    return [self.shape]
-}).play(0.25, delay: 4.00, {
-    self.shape.borderWidth = 0
+}).delay(4).play(0.25, animations: {
+    self.shape.layout = ShapePath(frame: CGRectMake(10, 80, 250, 100), corners: .AllCorners, cornerRadius: 0, borderWidth: 0)
     self.shape.borderColor = nil
-    self.shape.cornerRadius = 0
     self.shape.color = UIColor.yellowColor()
-    self.shape.frame = CGRectMake(10, 80, 250, 100)
-    return [self.shape]
-}).play(0.25, delay: 2.00, {
-    self.shape.cornerRadius = 50
+}).delay(2).play(0.25, animations: {
+    self.shape.layout = ShapePath(frame: CGRectMake(10, 80, 100, 100), corners: .AllCorners, cornerRadius: 50, borderWidth: 0)
     self.shape.frame = CGRectMake(10, 80, 100, 100)
     self.shape.color = UIColor.blueColor()
-    return [self.shape]
 })
 ```
 
@@ -79,7 +70,7 @@ To use SwiftHTTP in your project add the following 'Podfile' to your project
 	platform :ios, '8.0'
 	use_frameworks!
 
-	pod 'Jazz', '~> 0.9.1'
+	pod 'Jazz', '~> 0.9.2'
 
 Then run:
 

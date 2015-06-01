@@ -14,24 +14,14 @@ public enum CurveType {
     case EaseInOut
 }
 
-public protocol AnimationProtocol {
-    //create the animations that are to be preformed for this change to the layer
-    func doAnimations(duration: Double, delay: Double, type: CurveType) -> Void
-    
-    //finish the animation. Normally this means call drawPath() or the method that updates the layer
-    func finishAnimation(Void) -> Void
-}
-
 class Pending {
     let duration: Double
-    let delay: Double
-    let animations: ((Void) -> Array<AnimationProtocol>)
-    var done: ((Void) -> Void)?
+    let animations: ((Void) -> Void)
     let type: CurveType
+    var delay: Double?
     
-    init(_ duration: Double, _ delay: Double = 0, _ type: CurveType = .Linear, _ animations: ((Void) -> Array<AnimationProtocol>)) {
+    init(_ duration: Double, _ type: CurveType = .Linear, _ animations: ((Void) -> Void)) {
         self.duration = duration
-        self.delay = delay
         self.animations = animations
         self.type = type
     }
@@ -41,18 +31,18 @@ public class Jazz {
     private var pending = Array<Pending>()
     
     //convenience that starts the running
-    public convenience init(_ duration: Double = 0.25, delay: Double = 0, type: CurveType = .Linear, animations: ((Void) -> Array<AnimationProtocol>)) {
+    public convenience init(_ duration: Double = 0.25, type: CurveType = .Linear, animations: ((Void) -> Void)) {
         self.init()
-        play(duration, delay: delay, type: type, animations: animations)
+        play(duration, type: type, animations: animations)
     }
     
     //queue some animations
-    public func play(_ duration: Double = 0.25, delay: Double = 0, type: CurveType = .Linear, animations: ((Void) -> Array<AnimationProtocol>)) -> Jazz {
+    public func play(_ duration: Double = 0.25, delay: Double = 0, type: CurveType = .Linear, animations: ((Void) -> Void)) -> Jazz {
         var should = false
         if self.pending.count == 0 {
             should = true
         }
-        self.pending.append(Pending(duration,delay,.Linear,animations))
+        self.pending.append(Pending(duration,.Linear,animations))
         if should {
             start(self.pending[0])
         }
@@ -60,21 +50,11 @@ public class Jazz {
     }
     
     //An animation finished running
-    public func done(work:((Void) -> Void)) -> Jazz {
-        let anim = Pending(0,0,.Linear,{return []})
-        anim.done = work
+    public func delay(time: Double) -> Jazz {
+        let anim = Pending(0,.Linear,{return []})
+        anim.delay = time
         self.pending.append(anim)
         return self
-    }
-    
-    //turn a CurveType into the corresponding UIViewAnimationOptions
-    class public func valueForView(type: CurveType) -> UIViewAnimationOptions {
-        switch type {
-        case .EaseIn: return .CurveEaseIn
-        case .EaseInOut: return .CurveEaseInOut
-        case .EaseOut: return .CurveEaseOut
-        default: return .CurveLinear
-        }
     }
     
     //turn a CurveType into the corresponding UIViewAnimationCurve
@@ -87,8 +67,11 @@ public class Jazz {
         }
     }
     
-    //turn a CurveType into the corresponding MediaTiming
-    class public func valueForTiming(type: CurveType) -> String {
+    class public func timeFunctionForCurve(type: CurveType) -> CAMediaTimingFunction {
+        return CAMediaTimingFunction(name: timingFunctionNameForCurve(type))
+    }
+    //turn a CurveType into the corresponding UIViewAnimationCurve
+    class private func timingFunctionNameForCurve(type: CurveType) -> String {
         switch type {
         case .EaseIn: return kCAMediaTimingFunctionEaseIn
         case .EaseInOut: return kCAMediaTimingFunctionEaseInEaseOut
@@ -98,14 +81,21 @@ public class Jazz {
     }
     
     //create a basic animation from the standard properties
-    class public func createAnimation(duration: Double, delay: Double, type: CurveType, key: String) -> CABasicAnimation {
+    class public func createAnimation(duration: CFTimeInterval = CATransaction.animationDuration(),
+        type: CAMediaTimingFunction = Jazz.timingFunction(), key: String) -> CABasicAnimation {
         var animation = CABasicAnimation(keyPath: key)
         animation.duration = duration
-        animation.beginTime = CACurrentMediaTime() + delay
-        animation.timingFunction = CAMediaTimingFunction(name: Jazz.valueForTiming(type))
-        animation.fillMode = kCAFillModeForwards
-        animation.removedOnCompletion = false
+        //animation.beginTime = CACurrentMediaTime() + delay
+        animation.timingFunction = type
         return animation
+    }
+    
+    //get the timing function or use the default one
+    class public func timingFunction() -> CAMediaTimingFunction {
+            if let type = CATransaction.animationTimingFunction() {
+                return type
+            }
+            return CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
     }
     
     //creates a random key that is for a single animation
@@ -126,24 +116,18 @@ public class Jazz {
     
     //private method that actually runs the animation
     private func start(current: Pending) {
-        if let d = current.done {
-            d()
-            self.doFinish()
-        } else {
-            UIView.beginAnimations(nil, context: nil)
-            UIView.setAnimationDelay(current.delay)
-            UIView.setAnimationDuration(current.duration)
-            UIView.setAnimationCurve(Jazz.valueForCurve(current.type))
-            let views = current.animations()
-            CATransaction.setCompletionBlock {
-                for view in views {
-                    view.finishAnimation()
-                }
+        if let d = current.delay {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(d * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
                 self.doFinish()
             }
-            for view in views {
-                view.doAnimations(current.duration, delay: current.delay, type: current.type)
+        } else {
+            UIView.beginAnimations(nil, context: nil)
+            UIView.setAnimationDuration(current.duration)
+            UIView.setAnimationCurve(Jazz.valueForCurve(current.type))
+            CATransaction.setCompletionBlock {
+                self.doFinish()
             }
+            current.animations()
             UIView.commitAnimations()
         }
     }
