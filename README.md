@@ -5,9 +5,9 @@ Jazz is an view animation library in Swift for iOS. It provides custom controls 
 ## Features
 
 - Animatable controls
-- Button
+- Button View
 - LoadingView/ProgressView
-- Shape
+- Shape View
 - Simple concise codebase at just a few hundred LOC.
 
 ## Example
@@ -28,7 +28,7 @@ The code:
 //Shape is a view in a view controller
 
 //add a shape view to the view controller 
-let shape = Shape(layout: ShapePath(frame: CGRectMake(10, 80, 250, 50), corners: .AllCorners, cornerRadius: 25, borderWidth: 0))
+let shape = ShapeView(layout: ShapePath(frame: CGRectMake(10, 80, 250, 50), corners: .AllCorners, cornerRadius: 25, borderWidth: 0))
 shape.color = UIColor(red: 253/255.0, green: 56/255.0, blue: 105/255.0, alpha: 1)
 shape.autoresizingMask = .FlexibleHeight | .FlexibleWidth
 self.view.addSubview(shape)
@@ -64,13 +64,13 @@ Jazz works with iOS 7 or above. It is recommended to use iOS 8/10.10 or above fo
 
 Check out [Get Started](http://cocoapods.org/) tab on [cocoapods.org](http://cocoapods.org/).
 
-To use SwiftHTTP in your project add the following 'Podfile' to your project
+To use Jazz in your project add the following 'Podfile' to your project
 
 	source 'https://github.com/CocoaPods/Specs.git'
 	platform :ios, '8.0'
 	use_frameworks!
 
-	pod 'Jazz', '~> 0.9.2'
+	pod 'Jazz', '~> 1.0.0'
 
 Then run:
 
@@ -81,6 +81,19 @@ Then run:
 Check out the [Carthage](https://github.com/Carthage/Carthage) docs on how to add a install. The `Jazz` framework is already setup with shared schemes.
 
 [Carthage Install](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application)
+
+You can install Carthage with [Homebrew](http://brew.sh/) using the following command:
+
+```bash
+$ brew update
+$ brew install carthage
+```
+
+To integrate Jazz into your Xcode project using Carthage, specify it in your `Cartfile`:
+
+```
+github "daltoniam/Jazz" >= 1.0.0
+```
 
 ### Rogue
 

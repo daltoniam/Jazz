@@ -9,10 +9,10 @@
 /* Begin PBXBuildFile section */
 		5CC9A5471AB1FA700060F3AD /* Jazz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CC9A53B1AB1FA6F0060F3AD /* Jazz.framework */; };
 		5CC9A55B1AB1FAF10060F3AD /* JazzTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A5591AB1FAF10060F3AD /* JazzTests.swift */; };
-		5CC9A5601AB1FB3C0060F3AD /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A55C1AB1FB3C0060F3AD /* Button.swift */; };
+		5CC9A5601AB1FB3C0060F3AD /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A55C1AB1FB3C0060F3AD /* ButtonView.swift */; };
 		5CC9A5611AB1FB3C0060F3AD /* Jazz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A55D1AB1FB3C0060F3AD /* Jazz.swift */; };
 		5CC9A5621AB1FB3C0060F3AD /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A55E1AB1FB3C0060F3AD /* LoadingView.swift */; };
-		5CC9A5631AB1FB3C0060F3AD /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A55F1AB1FB3C0060F3AD /* Shape.swift */; };
+		5CC9A5631AB1FB3C0060F3AD /* ShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC9A55F1AB1FB3C0060F3AD /* ShapeView.swift */; };
 		5CC9A5671AB1FCAC0060F3AD /* Jazz.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CC9A5661AB1FCAC0060F3AD /* Jazz.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -31,10 +31,10 @@
 		5CC9A5461AB1FA700060F3AD /* JazzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JazzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CC9A5581AB1FAF10060F3AD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5CC9A5591AB1FAF10060F3AD /* JazzTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JazzTests.swift; sourceTree = "<group>"; };
-		5CC9A55C1AB1FB3C0060F3AD /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = SOURCE_ROOT; };
+		5CC9A55C1AB1FB3C0060F3AD /* ButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = SOURCE_ROOT; };
 		5CC9A55D1AB1FB3C0060F3AD /* Jazz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Jazz.swift; sourceTree = SOURCE_ROOT; };
 		5CC9A55E1AB1FB3C0060F3AD /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = SOURCE_ROOT; };
-		5CC9A55F1AB1FB3C0060F3AD /* Shape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = SOURCE_ROOT; };
+		5CC9A55F1AB1FB3C0060F3AD /* ShapeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShapeView.swift; sourceTree = SOURCE_ROOT; };
 		5CC9A5641AB1FC9F0060F3AD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		5CC9A5661AB1FCAC0060F3AD /* Jazz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Jazz.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -79,10 +79,10 @@
 		5CC9A53D1AB1FA6F0060F3AD /* Jazz */ = {
 			isa = PBXGroup;
 			children = (
-				5CC9A55C1AB1FB3C0060F3AD /* Button.swift */,
+				5CC9A55C1AB1FB3C0060F3AD /* ButtonView.swift */,
 				5CC9A55D1AB1FB3C0060F3AD /* Jazz.swift */,
 				5CC9A55E1AB1FB3C0060F3AD /* LoadingView.swift */,
-				5CC9A55F1AB1FB3C0060F3AD /* Shape.swift */,
+				5CC9A55F1AB1FB3C0060F3AD /* ShapeView.swift */,
 				5CC9A5661AB1FCAC0060F3AD /* Jazz.h */,
 				5CC9A53E1AB1FA6F0060F3AD /* Supporting Files */,
 			);
@@ -162,7 +162,7 @@
 		5CC9A5321AB1FA6F0060F3AD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = Vluxe;
 				TargetAttributes = {
 					5CC9A53A1AB1FA6F0060F3AD = {
@@ -214,9 +214,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CC9A5611AB1FB3C0060F3AD /* Jazz.swift in Sources */,
-				5CC9A5601AB1FB3C0060F3AD /* Button.swift in Sources */,
+				5CC9A5601AB1FB3C0060F3AD /* ButtonView.swift in Sources */,
 				5CC9A5621AB1FB3C0060F3AD /* LoadingView.swift in Sources */,
-				5CC9A5631AB1FB3C0060F3AD /* Shape.swift in Sources */,
+				5CC9A5631AB1FB3C0060F3AD /* ShapeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +260,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;

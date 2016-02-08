@@ -30,21 +30,25 @@ class Pending {
 public class Jazz {
     private var pending = Array<Pending>()
     
+    
     //convenience that starts the running
-    public convenience init(_ duration: Double = 0.25, type: CurveType = .Linear, animations: ((Void) -> Void)) {
-        self.init()
+    public init(_ duration: Double = 0.25, type: CurveType = .Linear, animations: ((Void) -> Void)) {
         play(duration, type: type, animations: animations)
     }
     
+    public init(delayTime: Double) {
+        delay(delayTime)
+    }
+    
     //queue some animations
-    public func play(_ duration: Double = 0.25, delay: Double = 0, type: CurveType = .Linear, animations: ((Void) -> Void)) -> Jazz {
+    public func play(duration: Double = 0.25, delay: Double = 0, type: CurveType = .Linear, animations: ((Void) -> Void)) -> Jazz {
         var should = false
-        if self.pending.count == 0 {
+        if pending.count == 0 {
             should = true
         }
-        self.pending.append(Pending(duration,.Linear,animations))
+        pending.append(Pending(duration,.Linear,animations))
         if should {
-            start(self.pending[0])
+            start(pending[0])
         }
         return self
     }
@@ -53,7 +57,14 @@ public class Jazz {
     public func delay(time: Double) -> Jazz {
         let anim = Pending(0,.Linear,{return []})
         anim.delay = time
-        self.pending.append(anim)
+        var should = false
+        if pending.count == 0 {
+            should = true
+        }
+        pending.append(anim)
+        if should {
+            start(pending[0])
+        }
         return self
     }
     
@@ -83,7 +94,7 @@ public class Jazz {
     //create a basic animation from the standard properties
     class public func createAnimation(duration: CFTimeInterval = CATransaction.animationDuration(),
         type: CAMediaTimingFunction = Jazz.timingFunction(), key: String) -> CABasicAnimation {
-        var animation = CABasicAnimation(keyPath: key)
+        let animation = CABasicAnimation(keyPath: key)
         animation.duration = duration
         //animation.beginTime = CACurrentMediaTime() + delay
         animation.timingFunction = type
@@ -104,20 +115,15 @@ public class Jazz {
         var str = ""
         for var i = 0; i < 14; i++ {
             let start = Int(arc4random() % 14)
-            str.append(letters[advance(letters.startIndex,start)])
+            str.append(letters[letters.startIndex.advancedBy(start)])
         }
-        return "\(Jazz.animPrefix())\(str)"
-    }
-    
-    //the prefix to identify the animations to remove on completion
-    class public func animPrefix() -> String {
-        return "vluxe"
+        return "vluxe\(str)"
     }
     
     //private method that actually runs the animation
     private func start(current: Pending) {
         if let d = current.delay {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(d * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(d * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
                 self.doFinish()
             }
         } else {
@@ -134,9 +140,9 @@ public class Jazz {
     
     //finish a pending animation
     private func doFinish() {
-        self.pending.removeAtIndex(0)
-        if self.pending.count > 0 {
-            self.start(self.pending[0])
+        pending.removeAtIndex(0)
+        if pending.count > 0 {
+            start(pending[0])
         }
     }
     
@@ -146,12 +152,12 @@ public class Jazz {
     
     ///Change the frame of a view
     public class func updateFrame(view :UIView, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) {
-        var frame = view.frame
-        frame.origin.x = x
-        frame.origin.y = y
-        frame.size.width = width
-        frame.size.height = height
-        view.frame = frame
+        var fr = view.frame
+        fr.origin.x = x
+        fr.origin.y = y
+        fr.size.width = width
+        fr.size.height = height
+        view.frame = fr
     }
     
     //move the view around
