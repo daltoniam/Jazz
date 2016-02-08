@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.author       = {'Dalton Cherry' => 'http://daltoniam.com'}
   s.source       = { :git => 'https://github.com/daltoniam/Jazz.git',  :tag => "#{s.version}"}
   s.social_media_url = 'http://twitter.com/daltoniam'
-  s.ios.deployment_target = '7.0'
+  s.ios.deployment_target = '8.0'
   s.source_files = '*.swift'
   s.requires_arc = 'true'
 end
