@@ -56,11 +56,11 @@ Jazz(0.25, animations: {
 
 ## Requirements
 
-Jazz works with iOS 7 or above. It is recommended to use iOS 8/10.10 or above for Cocoapods/framework support.
+Jazz works with iOS 7 or above. It is recommended to use iOS 8/10.10 or above for CocoaPods/framework support.
 
 ## Installation
 
-### Cocoapods
+### CocoaPods
 
 Check out [Get Started](http://cocoapods.org/) tab on [cocoapods.org](http://cocoapods.org/).
 
