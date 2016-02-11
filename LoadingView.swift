@@ -7,46 +7,63 @@
 
 import UIKit
 
-public class LoadingView: UIView {
-    
-    public var clockwise = true //if the loading should go clockwise or counterclockwise
-    
-    //the width of the ring
-    public var lineWidth: CGFloat = 2.0 {
-        didSet {
-            doLineWidth()
+public struct Pose {
+    let speed: CFTimeInterval //the speed the animation (the first one in the poses array should be zero)
+    let rotationDegrees: CGFloat //set how many degrees the view should rotate by (normally the degrees increase with each pose)
+    let length: CGFloat //the length of the progress field to fill
+    public init(_ speed: CFTimeInterval, _ rotationDegrees: CGFloat, _ length: CGFloat) {
+        self.speed = speed
+        self.rotationDegrees = rotationDegrees
+        self.length = length
+    }
+}
+
+public class LoadingView : UIView {
+    override public var layer: CAShapeLayer {
+        get {
+            return super.layer as! CAShapeLayer
         }
     }
-    //the color of the ring
-    public var color: UIColor? {
+    public var poses = [Pose(0.0, 215, 0.3), Pose(0.9, 360, 0.8), Pose(0.5, 575, 0.3)] {
+        didSet {
+            needsRefresh = true
+        }
+    }
+    public var color = UIColor.blackColor() {
         didSet {
             doStrokeColor()
         }
     }
-    //the progress of the loading. This can be between 0 and 1
-    public var progress: CGFloat = 0.0 {
+    
+    public var lineWidth: CGFloat = 3.0 {
         didSet {
-            doProgress()
+            doLineWidth()
+        }
+    }
+    public var lineCap = kCALineCapRound {
+        didSet {
+            drawPath()
         }
     }
     
-    //do the layout updates when the frame updates
-    override public var frame: CGRect {
-        didSet {
-            doLayoutAnimation()
-        }
-    }
+    //NOTE!!!
+    //The startPoint and progress properties should not be used at the same time as the start and stop methods. It just doesn't make sense.
+    public var startPoint: CGFloat = 270
     
-    public var shapeLayer: CAShapeLayer! //the layer that represents the view's shape layer
-    private var point:CGFloat = 0
-    public var startPoint: CGFloat {
-        set{
-            point = newValue
-            Jazz.rotateView(self, degrees: newValue)
+    //provide a value between 0 and 1
+    public var progress: CGFloat = 0 {
+        didSet {
+            poses = [Pose(0.0, startPoint, oldProgress), Pose(0.9, startPoint, progress)]
+            isRunning = true
+            doAnimation()
+            isRunning = false
+            oldProgress = progress
         }
-        get{return point}
     }
-    private var stopped = false
+    var oldProgress: CGFloat = 0
+    
+    var isRunning = false
+    var needsRefresh = false
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
@@ -60,120 +77,95 @@ public class LoadingView: UIView {
     //setup the properties
     func commonInit() {
         userInteractionEnabled = false
-        startPoint = 270
-        shapeLayer = layer as! CAShapeLayer
         backgroundColor = UIColor.clearColor()
-        drawPath()
     }
     
-    //do that frame layout animation!
-    func doLayoutAnimation() {
-        if let layer = shapeLayer {
-            let newPath = buildPath(frame).CGPath
-            let animation = Jazz.createAnimation(key: "path")
-            animation.fromValue = layer.path
-            animation.toValue = newPath
-            layer.addAnimation(animation, forKey: Jazz.oneShotKey())
-            layer.path = newPath
+    //start the animation
+    public func start() {
+        isRunning = true
+        doAnimation()
+    }
+    
+    //stop the animation
+    public func stop() {
+        isRunning = false
+    }
+    
+    func doAnimation() {
+        if !needsRefresh && !isRunning {
+            isRunning = false
+            layer.removeAllAnimations()
+            return
         }
+        needsRefresh = false
+        
+        var time: CFTimeInterval = 0
+        var times = [CFTimeInterval]()
+        var rotations = [CGFloat]()
+        var strokeEnds = [CGFloat]()
+        
+        let totalSeconds = self.poses.reduce(0) { $0 + $1.speed }
+        
+        for pose in poses {
+            time += pose.speed
+            times.append(time / totalSeconds)
+            rotations.append(Jazz.degreesToRadians(pose.rotationDegrees)) //pose.rotationStart * 2 * CGFloat(M_PI)
+            strokeEnds.append(pose.length)
+        }
+        
+        animateKeyPath("strokeEnd", duration: totalSeconds, times: times, values: strokeEnds)
+        animateKeyPath("transform.rotation", duration: totalSeconds, times: times, values: rotations)
+        
+        layer.strokeEnd = strokeEnds.last!
+        layer.transform = CATransform3DMakeRotation(rotations.last!, 0, 0, 1)
+    }
+    
+    public override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
+        if isRunning || needsRefresh {
+            doAnimation()
+        }
+    }
+    
+    func animateKeyPath(keyPath: String, duration: CFTimeInterval, times: [CFTimeInterval], values: [CGFloat]) {
+        let animation = CAKeyframeAnimation(keyPath: keyPath)
+        animation.keyTimes = times
+        animation.values = values
+        animation.calculationMode = kCAAnimationLinear
+        animation.duration = duration
+        if keyPath == "strokeEnd" {
+            animation.delegate = self
+        }
+        layer.addAnimation(animation, forKey: animation.keyPath)
+    }
+    
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        drawPath()
+        layer.path = UIBezierPath(ovalInRect: CGRectInset(bounds, layer.lineWidth / 2, layer.lineWidth / 2)).CGPath
+    }
+    
+    func drawPath() {
+        layer.fillColor = nil
+        layer.strokeColor = color.CGColor
+        layer.lineWidth = lineWidth
+        layer.lineCap = lineCap
     }
     
     //do that fill color
     func doStrokeColor() {
-        if let layer = shapeLayer {
-            let animation = Jazz.createAnimation(key: "strokeColor")
-            animation.fromValue = layer.strokeColor
-            animation.toValue = color?.CGColor
-            layer.addAnimation(animation, forKey: Jazz.oneShotKey())
-            layer.strokeColor = color?.CGColor
-        }
+        let animation = Jazz.createAnimation(key: "strokeColor")
+        animation.fromValue = layer.strokeColor
+        animation.toValue = color.CGColor
+        layer.addAnimation(animation, forKey: Jazz.oneShotKey())
+        layer.strokeColor = color.CGColor
     }
     
-    //do progress work
-    func doProgress() {
-        var pro = progress
-        if pro > 1 {
-            pro = 1
-        } else if pro < 0 {
-            pro = 0
-        }
-        if let layer = shapeLayer {
-            let animation = Jazz.createAnimation(1.2, type: Jazz.timeFunctionForCurve(.EaseInOut), key: "strokeEnd")
-            animation.fromValue = layer.strokeEnd
-            animation.toValue = pro
-            layer.addAnimation(animation, forKey: Jazz.oneShotKey())
-            layer.strokeEnd = pro
-        }
-    }
-    
-    //do progress work
     func doLineWidth() {
-        if let layer = shapeLayer {
-            let bWidth = Jazz.createAnimation(key: "lineWidth")
-            bWidth.fromValue = layer.lineWidth
-            bWidth.toValue = lineWidth
-            layer.addAnimation(bWidth, forKey: Jazz.oneShotKey())
-            layer.lineWidth = lineWidth
-        }
-    }
-    
-    //start the loading animation
-    public func start(speed: Double = 1.2) {
-        runLoading(speed)
-    }
-    
-    //run the loading animation
-    private func runLoading(speed: CFTimeInterval) {
-        if stopped {
-            stopped = false
-            progress = 0
-            return
-        }
-        
-        let startAnim = Jazz.createAnimation(speed, type: Jazz.timeFunctionForCurve(.EaseInOut), key: "strokeStart")
-        startAnim.fromValue = shapeLayer.strokeStart
-        startAnim.toValue = 1
-        
-        let animation = Jazz.createAnimation(speed, type: Jazz.timeFunctionForCurve(.EaseInOut), key: "strokeEnd")
-        animation.fromValue = progress
-        animation.toValue = 1
-        CATransaction.begin()
-        CATransaction.setCompletionBlock {
-            self.shapeLayer.strokeStart = 0
-            self.progress = 0
-            self.start(speed)
-        }
-        shapeLayer.addAnimation(startAnim, forKey: Jazz.oneShotKey())
-        shapeLayer.addAnimation(animation, forKey: Jazz.oneShotKey())
-        shapeLayer.strokeStart = 1
-        shapeLayer.strokeEnd = 1
-        CATransaction.commit()
-    }
-    
-    //stop the loading
-    public func stop() {
-        stopped = true
-    }
-    
-    //creates the shapes path
-    func buildPath(rect: CGRect) -> UIBezierPath {
-        let pad: CGFloat = 1
-        var fr = rect
-        fr.size.width = floor(rect.size.width-(pad*2))
-        fr.size.height = floor(rect.size.height-(pad*2))
-        fr.origin.x = pad
-        fr.origin.y = pad
-        return UIBezierPath(ovalInRect: fr)
-    }
-    
-    //update the shape from the properties
-    func drawPath() {
-        shapeLayer.lineCap = kCALineCapRound
-        shapeLayer.fillColor = UIColor.clearColor().CGColor
-        shapeLayer.strokeColor = color?.CGColor
-        shapeLayer.lineWidth = lineWidth
-        shapeLayer.strokeEnd = progress
-        shapeLayer.path = buildPath(bounds).CGPath
+        let bWidth = Jazz.createAnimation(key: "lineWidth")
+        bWidth.fromValue = layer.lineWidth
+        bWidth.toValue = lineWidth
+        layer.addAnimation(bWidth, forKey: Jazz.oneShotKey())
+        layer.lineWidth = lineWidth
     }
     
     //set the layer of this view to be a shape

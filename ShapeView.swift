@@ -30,8 +30,8 @@ public class ShapePath {
         }
         radius = r
         var fr = frame
-        fr.size.width = floor(frame.size.width)
-        fr.size.height = floor(frame.size.height)
+        fr.origin.x = 0
+        fr.origin.y = 0
         bezier = UIBezierPath(roundedRect: fr, byRoundingCorners: corners, cornerRadii: CGSizeMake(r, r))
         bezier.lineWidth = borderWidth
         bezier.closePath()
@@ -75,7 +75,11 @@ class ShapeLayer : CAShapeLayer {
 }
 
 public class ShapeView: UIView {
-    public var shapeLayer: CAShapeLayer! //the layer that represents the view's shape layer
+    override public var layer: CAShapeLayer {
+        get {
+            return super.layer as! CAShapeLayer
+        }
+    }
     
     //layout is the values the create the layer's path
     public var layout: ShapePath {
@@ -128,14 +132,12 @@ public class ShapeView: UIView {
     
     //setup the properties
     func commonInit() {
-        shapeLayer = layer as! CAShapeLayer
         backgroundColor = UIColor.clearColor()
         drawPath()
     }
     
     //update the shape from the properties
     func drawPath() {
-        guard let layer = shapeLayer else {return}
         layer.fillColor = color?.CGColor
         layer.borderColor = borderColor?.CGColor
         layer.borderWidth = layout.borderWidth

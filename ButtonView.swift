@@ -37,7 +37,7 @@ public class ButtonView: ShapeView {
     //setup the properties
     override func commonInit() {
         super.commonInit()
-        shapeLayer.masksToBounds = true
+        layer.masksToBounds = true
         autoresizesSubviews = true
         textLabel.backgroundColor = UIColor.clearColor()
         textLabel.textAlignment = .Center
@@ -92,7 +92,7 @@ public class ButtonView: ShapeView {
         super.drawPath()
         if highlighted && !ripple {
             guard let c = highlightColor else {return}
-            shapeLayer.fillColor = c.CGColor
+            layer.fillColor = c.CGColor
         }
     }
     //handle the gesture
@@ -115,7 +115,7 @@ public class ButtonView: ShapeView {
         rippleLayer.fillColor = highlightColor?.CGColor
         rippleLayer.path = UIBezierPath(roundedRect: CGRectMake(point.x-(p/2), point.y-(p/2), p, p), cornerRadius: p/2).CGPath
         rippleLayer.opacity = 0.8
-        shapeLayer.addSublayer(rippleLayer)
+        layer.addSublayer(rippleLayer)
         addSubview(textLabel)
         
         let dur = 0.3
@@ -124,7 +124,7 @@ public class ButtonView: ShapeView {
         animation.toValue = 0
         let move = Jazz.createAnimation(dur, key: "path")
         move.fromValue = rippleLayer.path
-        move.toValue = shapeLayer.path
+        move.toValue = layer.path
         CATransaction.begin()
         CATransaction.setCompletionBlock {
             rippleLayer.removeFromSuperlayer()
@@ -135,7 +135,7 @@ public class ButtonView: ShapeView {
         rippleLayer.addAnimation(animation, forKey: Jazz.oneShotKey())
         rippleLayer.addAnimation(move, forKey: Jazz.oneShotKey())
         rippleLayer.opacity = 0
-        rippleLayer.path = shapeLayer.path
+        rippleLayer.path = layer.path
         CATransaction.commit()
     }
 }
