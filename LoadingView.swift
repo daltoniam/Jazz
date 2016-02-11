@@ -46,6 +46,12 @@ public class LoadingView : UIView {
         }
     }
     
+     override public var frame: CGRect {
+        willSet {
+            layer.transform = CATransform3DIdentity
+        }
+    }
+    
     //NOTE!!!
     //The startPoint and progress properties should not be used at the same time as the start and stop methods. It just doesn't make sense.
     public var startPoint: CGFloat = 270
@@ -64,6 +70,7 @@ public class LoadingView : UIView {
     
     var isRunning = false
     var needsRefresh = false
+    var didStop: (Void -> Void)?
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
@@ -87,8 +94,9 @@ public class LoadingView : UIView {
     }
     
     //stop the animation
-    public func stop() {
+    public func stop(completion: (Void -> Void)? = nil) {
         isRunning = false
+        didStop = completion
     }
     
     func doAnimation() {
@@ -123,6 +131,9 @@ public class LoadingView : UIView {
     public override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
         if isRunning || needsRefresh {
             doAnimation()
+        } else if let complete = didStop {
+            complete()
+            didStop = nil
         }
     }
     
