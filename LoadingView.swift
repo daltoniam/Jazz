@@ -89,6 +89,9 @@ public class LoadingView : UIView {
     
     //start the animation
     public func start() {
+        if isRunning {
+            return
+        }
         isRunning = true
         doAnimation()
     }
