@@ -109,13 +109,14 @@ public class LoadingView : UIView {
             return
         }
         needsRefresh = false
-        
+        if poses.count == 0 {
+            return //no pose, no animation
+        }
         var time: CFTimeInterval = 0
         var times = [CFTimeInterval]()
         var rotations = [CGFloat]()
         var strokeEnds = [CGFloat]()
-        
-        let totalSeconds = self.poses.reduce(0) { $0 + $1.speed }
+        let totalSeconds = poses.reduce(0) { $0 + $1.speed }
         
         for pose in poses {
             time += pose.speed
@@ -156,6 +157,9 @@ public class LoadingView : UIView {
         super.layoutSubviews()
         drawPath()
         layer.path = UIBezierPath(ovalInRect: CGRectInset(bounds, layer.lineWidth / 2, layer.lineWidth / 2)).CGPath
+        if let last = poses.last where isRunning {
+            layer.transform = CATransform3DMakeRotation(Jazz.degreesToRadians(last.rotationDegrees), 0, 0, 1)
+        }
     }
     
     func drawPath() {
