@@ -44,7 +44,7 @@ public class ButtonView: ShapeView {
         textLabel.contentMode = .Center
         textLabel.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin]
         addSubview(textLabel)
-        let tap = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
+        let tap = UITapGestureRecognizer(target: self, action:#selector(ButtonView.handleTap(_:)))
         tap.numberOfTapsRequired = 1
         addGestureRecognizer(tap)
     }
@@ -88,7 +88,7 @@ public class ButtonView: ShapeView {
     }
     
     //highlight support
-    override func drawPath() {
+    override public func drawPath() {
         super.drawPath()
         if highlighted && !ripple {
             guard let c = highlightColor else {return}

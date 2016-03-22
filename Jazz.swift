@@ -113,7 +113,7 @@ public class Jazz {
     class public func oneShotKey() -> String {
         let letters = "abcdefghijklmnopqurstuvwxyz"
         var str = ""
-        for var i = 0; i < 14; i++ {
+        for _ in 0 ..< 14 {
             let start = Int(arc4random() % 14)
             str.append(letters[letters.startIndex.advancedBy(start)])
         }

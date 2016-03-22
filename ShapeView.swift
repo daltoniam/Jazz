@@ -137,7 +137,7 @@ public class ShapeView: UIView {
     }
     
     //update the shape from the properties
-    func drawPath() {
+    public func drawPath() {
         layer.fillColor = color?.CGColor
         layer.borderColor = borderColor?.CGColor
         layer.borderWidth = layout.borderWidth
