@@ -18,35 +18,35 @@ public struct Pose {
     }
 }
 
-public class LoadingView : UIView {
-    override public var layer: CAShapeLayer {
+open class LoadingView : UIView, CAAnimationDelegate {
+    override open var layer: CAShapeLayer {
         get {
             return super.layer as! CAShapeLayer
         }
     }
-    public var poses = [Pose(0.0, 215, 0.3), Pose(0.9, 360, 0.8), Pose(0.5, 575, 0.3)] {
+    open var poses = [Pose(0.0, 215, 0.3), Pose(0.9, 360, 0.8), Pose(0.5, 575, 0.3)] {
         didSet {
             needsRefresh = true
         }
     }
-    public var color = UIColor.blackColor() {
+    open var color = UIColor.black {
         didSet {
             doStrokeColor()
         }
     }
     
-    public var lineWidth: CGFloat = 3.0 {
+    open var lineWidth: CGFloat = 3.0 {
         didSet {
             doLineWidth()
         }
     }
-    public var lineCap = kCALineCapRound {
+    open var lineCap = kCALineCapRound {
         didSet {
             drawPath()
         }
     }
     
-     override public var frame: CGRect {
+     override open var frame: CGRect {
         willSet {
             layer.transform = CATransform3DIdentity
         }
@@ -54,10 +54,10 @@ public class LoadingView : UIView {
     
     //NOTE!!!
     //The startPoint and progress properties should not be used at the same time as the start and stop methods. It just doesn't make sense.
-    public var startPoint: CGFloat = 270
+    open var startPoint: CGFloat = 270
     
     //provide a value between 0 and 1
-    public var progress: CGFloat = 0 {
+    open var progress: CGFloat = 0 {
         didSet {
             poses = [Pose(0.0, startPoint, oldProgress), Pose(0.9, startPoint, progress)]
             isRunning = true
@@ -70,7 +70,7 @@ public class LoadingView : UIView {
     
     var isRunning = false
     var needsRefresh = false
-    var didStop: (Void -> Void)?
+    var didStop: ((Void) -> Void)?
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
@@ -83,12 +83,12 @@ public class LoadingView : UIView {
     
     //setup the properties
     func commonInit() {
-        userInteractionEnabled = false
-        backgroundColor = UIColor.clearColor()
+        isUserInteractionEnabled = false
+        backgroundColor = UIColor.clear
     }
     
     //start the animation
-    public func start() {
+    open func start() {
         if isRunning {
             return
         }
@@ -97,7 +97,7 @@ public class LoadingView : UIView {
     }
     
     //stop the animation
-    public func stop(completion: (Void -> Void)? = nil) {
+    open func stop(_ completion: ((Void) -> Void)? = nil) {
         isRunning = false
         didStop = completion
     }
@@ -132,7 +132,7 @@ public class LoadingView : UIView {
         layer.transform = CATransform3DMakeRotation(rotations.last!, 0, 0, 1)
     }
     
-    public override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
+    open func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         if isRunning || needsRefresh {
             doAnimation()
         } else if let complete = didStop {
@@ -141,30 +141,30 @@ public class LoadingView : UIView {
         }
     }
     
-    func animateKeyPath(keyPath: String, duration: CFTimeInterval, times: [CFTimeInterval], values: [CGFloat]) {
+    func animateKeyPath(_ keyPath: String, duration: CFTimeInterval, times: [CFTimeInterval], values: [CGFloat]) {
         let animation = CAKeyframeAnimation(keyPath: keyPath)
-        animation.keyTimes = times
+        animation.keyTimes = times as [NSNumber]?
         animation.values = values
         animation.calculationMode = kCAAnimationLinear
         animation.duration = duration
         if keyPath == "strokeEnd" {
             animation.delegate = self
         }
-        layer.addAnimation(animation, forKey: animation.keyPath)
+        layer.add(animation, forKey: animation.keyPath)
     }
     
-    override public func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
         drawPath()
-        layer.path = UIBezierPath(ovalInRect: CGRectInset(bounds, layer.lineWidth / 2, layer.lineWidth / 2)).CGPath
-        if let last = poses.last where isRunning {
+        layer.path = UIBezierPath(ovalIn: bounds.insetBy(dx: layer.lineWidth / 2, dy: layer.lineWidth / 2)).cgPath
+        if let last = poses.last , isRunning {
             layer.transform = CATransform3DMakeRotation(Jazz.degreesToRadians(last.rotationDegrees), 0, 0, 1)
         }
     }
     
     func drawPath() {
         layer.fillColor = nil
-        layer.strokeColor = color.CGColor
+        layer.strokeColor = color.cgColor
         layer.lineWidth = lineWidth
         layer.lineCap = lineCap
     }
@@ -173,21 +173,21 @@ public class LoadingView : UIView {
     func doStrokeColor() {
         let animation = Jazz.createAnimation(key: "strokeColor")
         animation.fromValue = layer.strokeColor
-        animation.toValue = color.CGColor
-        layer.addAnimation(animation, forKey: Jazz.oneShotKey())
-        layer.strokeColor = color.CGColor
+        animation.toValue = color.cgColor
+        layer.add(animation, forKey: Jazz.oneShotKey())
+        layer.strokeColor = color.cgColor
     }
     
     func doLineWidth() {
         let bWidth = Jazz.createAnimation(key: "lineWidth")
         bWidth.fromValue = layer.lineWidth
         bWidth.toValue = lineWidth
-        layer.addAnimation(bWidth, forKey: Jazz.oneShotKey())
+        layer.add(bWidth, forKey: Jazz.oneShotKey())
         layer.lineWidth = lineWidth
     }
     
     //set the layer of this view to be a shape
-    public override class func layerClass() -> AnyClass {
+    open override class var layerClass : AnyClass {
         return CAShapeLayer.self
     }
 }

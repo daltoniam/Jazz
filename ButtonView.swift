@@ -7,18 +7,18 @@
 
 import UIKit
 
-public class ButtonView: ShapeView {
-    private var highlighted = false
-    public var isHightlighted: Bool {return highlighted}
-    public var highlightColor: UIColor?
-    public var textLabel: UILabel = UILabel()
-    public var enabled: Bool = true {
+open class ButtonView: ShapeView {
+    fileprivate var highlighted = false
+    open var isHightlighted: Bool {return highlighted}
+    open var highlightColor: UIColor?
+    open var textLabel: UILabel = UILabel()
+    open var enabled: Bool = true {
         didSet {
-           textLabel.enabled = enabled
+           textLabel.isEnabled = enabled
         }
     }
-    public var ripple = false
-    private var tapHandler: ((Void) -> Void)?
+    open var ripple = false
+    var didTap: ((Void) -> Void)?
     
     //standard view init method
     override public init(frame: CGRect) {
@@ -39,30 +39,25 @@ public class ButtonView: ShapeView {
         super.commonInit()
         layer.masksToBounds = true
         autoresizesSubviews = true
-        textLabel.backgroundColor = UIColor.clearColor()
-        textLabel.textAlignment = .Center
-        textLabel.contentMode = .Center
-        textLabel.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin]
+        textLabel.backgroundColor = UIColor.clear
+        textLabel.textAlignment = .center
+        textLabel.contentMode = .center
+        textLabel.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight, UIViewAutoresizing.flexibleLeftMargin, UIViewAutoresizing.flexibleRightMargin]
         addSubview(textLabel)
-        let tap = UITapGestureRecognizer(target: self, action:#selector(ButtonView.handleTap(_:)))
+        let tap = UITapGestureRecognizer(target: self, action:#selector(handleTap(_:)))
         tap.numberOfTapsRequired = 1
         addGestureRecognizer(tap)
     }
     
-    //handle when the button is tapped
-    public func didTap(handler: ((Void) -> Void)) {
-        tapHandler = handler
-    }
-    
     //layout the subviews
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
         textLabel.frame = bounds
     }
     
     //process touches to known when to highlight the button
-    override public func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?)  {
-        super.touchesBegan(touches, withEvent: event)
+    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)  {
+        super.touchesBegan(touches, with: event)
         if enabled {
             highlighted = true
             drawPath()
@@ -70,8 +65,8 @@ public class ButtonView: ShapeView {
     }
     
     //touch ended, remove hightlight
-    public override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesEnded(touches, withEvent: event)
+    open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
         if enabled {
             highlighted = false
             drawPath()
@@ -79,8 +74,8 @@ public class ButtonView: ShapeView {
     }
     
     //touch cancelled, remove hightlight
-    public override func touchesCancelled(touches: Set<UITouch>!, withEvent event: UIEvent!) {
-        super.touchesCancelled(touches, withEvent: event)
+    open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent!) {
+        super.touchesCancelled(touches, with: event)
         if enabled {
             highlighted = false
             drawPath()
@@ -88,32 +83,32 @@ public class ButtonView: ShapeView {
     }
     
     //highlight support
-    override public func drawPath() {
+    override open func drawPath() {
         super.drawPath()
         if highlighted && !ripple {
             guard let c = highlightColor else {return}
-            layer.fillColor = c.CGColor
+            layer.fillColor = c.cgColor
         }
     }
     //handle the gesture
-    func handleTap(recognizer: UITapGestureRecognizer) {
+    func handleTap(_ recognizer: UITapGestureRecognizer) {
         if !enabled {
             return
         }
         if ripple {
             drawRipple(recognizer)
-        } else if let handler = tapHandler {
+        } else if let handler = didTap {
             handler()
         }
     }
     
     //draw the ripple effect on the button
-    func drawRipple(recognizer: UITapGestureRecognizer) {
+    func drawRipple(_ recognizer: UITapGestureRecognizer) {
         let rippleLayer = CAShapeLayer()
-        let point = recognizer.locationInView(self)
+        let point = recognizer.location(in: self)
         let p: CGFloat = frame.size.height
-        rippleLayer.fillColor = highlightColor?.CGColor
-        rippleLayer.path = UIBezierPath(roundedRect: CGRectMake(point.x-(p/2), point.y-(p/2), p, p), cornerRadius: p/2).CGPath
+        rippleLayer.fillColor = highlightColor?.cgColor
+        rippleLayer.path = UIBezierPath(roundedRect: CGRect(x: point.x-(p/2), y: point.y-(p/2), width: p, height: p), cornerRadius: p/2).cgPath
         rippleLayer.opacity = 0.8
         layer.addSublayer(rippleLayer)
         addSubview(textLabel)
@@ -128,12 +123,12 @@ public class ButtonView: ShapeView {
         CATransaction.begin()
         CATransaction.setCompletionBlock {
             rippleLayer.removeFromSuperlayer()
-            if let handler = self.tapHandler {
+            if let handler = self.didTap {
                 handler()
             }
         }
-        rippleLayer.addAnimation(animation, forKey: Jazz.oneShotKey())
-        rippleLayer.addAnimation(move, forKey: Jazz.oneShotKey())
+        rippleLayer.add(animation, forKey: Jazz.oneShotKey())
+        rippleLayer.add(move, forKey: Jazz.oneShotKey())
         rippleLayer.opacity = 0
         rippleLayer.path = layer.path
         CATransaction.commit()

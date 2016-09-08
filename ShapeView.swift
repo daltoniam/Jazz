@@ -7,21 +7,21 @@
 
 import UIKit
 
-public class ShapePath {
+open class ShapePath {
     var bezier: UIBezierPath
     var radius: CGFloat
     var rect: CGRect
     var corners: UIRectCorner
-    public var frame: CGRect{ return rect}
-    public var borderWidth: CGFloat{ return bezier.lineWidth}
-    public var path: CGPath {return bezier.CGPath}
-    public var cornerRadius: CGFloat {return radius}
+    open var frame: CGRect{ return rect}
+    open var borderWidth: CGFloat{ return bezier.lineWidth}
+    open var path: CGPath {return bezier.cgPath}
+    open var cornerRadius: CGFloat {return radius}
     
     //frame is the frame of the shape
     //corners is which corners on the shape to round (bottom left, top right, etc)
     //radius is the radius to round the corners (e.g. 4px)
     //borderWidth is the width of border to make
-    public init(frame: CGRect, corners: UIRectCorner = .AllCorners, cornerRadius: CGFloat = 0.0, borderWidth: CGFloat = 0.0 ) {
+    public init(frame: CGRect, corners: UIRectCorner = .allCorners, cornerRadius: CGFloat = 0.0, borderWidth: CGFloat = 0.0 ) {
         self.rect = frame
         self.corners = corners
         var r = cornerRadius
@@ -32,13 +32,13 @@ public class ShapePath {
         var fr = frame
         fr.origin.x = 0
         fr.origin.y = 0
-        bezier = UIBezierPath(roundedRect: fr, byRoundingCorners: corners, cornerRadii: CGSizeMake(r, r))
+        bezier = UIBezierPath(roundedRect: fr, byRoundingCorners: corners, cornerRadii: CGSize(width: r, height: r))
         bezier.lineWidth = borderWidth
-        bezier.closePath()
+        bezier.close()
     }
     
     //create a new ShapePath with an updated frame
-    public func newFrame(frame: CGRect) -> ShapePath {
+    open func newFrame(_ frame: CGRect) -> ShapePath {
         return ShapePath(frame: frame, corners: corners, cornerRadius: cornerRadius, borderWidth: borderWidth)
     }
 }
@@ -46,16 +46,16 @@ public class ShapePath {
 
 class ShapeLayer : CAShapeLayer {
     let keys = ["path": 0, "fillColor": 0, "borderColor": 0, "borderWidth": 0, "cornerRadius": 0]
-    override class func needsDisplayForKey(key: String) -> Bool {
-        return super.needsDisplayForKey(key)
+    override class func needsDisplay(forKey key: String) -> Bool {
+        return super.needsDisplay(forKey: key)
     }
     
-    override func actionForKey(event: String) -> CAAction? {
+    override func action(forKey event: String) -> CAAction? {
 
         if (keys[event] != nil) {
-            if let action = super.actionForKey("backgroundColor") as? CABasicAnimation {
+            if let action = super.action(forKey: "backgroundColor") as? CABasicAnimation {
                 let animation = CABasicAnimation(keyPath: event)
-                animation.fromValue = valueForKey(event)
+                animation.fromValue = value(forKey: event)
                 // Copy values from existing action
                 animation.autoreverses = action.autoreverses
                 animation.beginTime = CACurrentMediaTime() + action.beginTime
@@ -70,42 +70,42 @@ class ShapeLayer : CAShapeLayer {
                 return animation
             }
         }
-        return super.actionForKey(event)
+        return super.action(forKey: event)
     }
 }
 
-public class ShapeView: UIView {
-    override public var layer: CAShapeLayer {
+open class ShapeView: UIView {
+    override open var layer: CAShapeLayer {
         get {
             return super.layer as! CAShapeLayer
         }
     }
     
     //layout is the values the create the layer's path
-    public var layout: ShapePath {
+    open var layout: ShapePath {
         didSet {
             frame = layout.frame
         }
         
     }
     //the color of the shape's border
-    public var borderColor: UIColor? {
+    open var borderColor: UIColor? {
         didSet {
             drawPath()
         }
     }
     
     //the color of the shape
-    public var color: UIColor? {
+    open var color: UIColor? {
         didSet {
             drawPath()
         }
     }
     
     //do the layout updates when the frame updates
-    override public var frame: CGRect {
+    override open var frame: CGRect {
         didSet {
-            if !CGRectEqualToRect(frame, layout.rect) {
+            if !frame.equalTo(layout.rect) {
                 layout = layout.newFrame(frame)
             } else {
                 drawPath()
@@ -119,7 +119,7 @@ public class ShapeView: UIView {
         commonInit()
     }
     required public init?(coder aDecoder: NSCoder) {
-        layout = ShapePath(frame: CGRectZero, cornerRadius: 0, borderWidth: 0)
+        layout = ShapePath(frame: CGRect.zero, cornerRadius: 0, borderWidth: 0)
         super.init(coder: aDecoder)
         commonInit()
     }
@@ -132,21 +132,21 @@ public class ShapeView: UIView {
     
     //setup the properties
     func commonInit() {
-        backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clear
         drawPath()
     }
     
     //update the shape from the properties
-    public func drawPath() {
-        layer.fillColor = color?.CGColor
-        layer.borderColor = borderColor?.CGColor
+    open func drawPath() {
+        layer.fillColor = color?.cgColor
+        layer.borderColor = borderColor?.cgColor
         layer.borderWidth = layout.borderWidth
         layer.cornerRadius = layout.cornerRadius
         layer.path = layout.path
     }
     
     //set the layer of this view to be a shape
-    public override class func layerClass() -> AnyClass {
+    open override class var layerClass : AnyClass {
         return ShapeLayer.self
     }
 }

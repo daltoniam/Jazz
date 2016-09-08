@@ -8,10 +8,10 @@
 import UIKit
 
 public enum CurveType {
-    case Linear
-    case EaseIn
-    case EaseOut
-    case EaseInOut
+    case linear
+    case easeIn
+    case easeOut
+    case easeInOut
 }
 
 class Pending {
@@ -20,19 +20,19 @@ class Pending {
     let type: CurveType
     var delay: Double?
     
-    init(_ duration: Double, _ type: CurveType = .Linear, _ animations: ((Void) -> Void)) {
+    init(_ duration: Double, _ type: CurveType = .linear, _ animations: @escaping ((Void) -> Void)) {
         self.duration = duration
         self.animations = animations
         self.type = type
     }
 }
 
-public class Jazz {
-    private var pending = Array<Pending>()
+open class Jazz {
+    fileprivate var pending = Array<Pending>()
     
     
     //convenience that starts the running
-    public init(_ duration: Double = 0.25, type: CurveType = .Linear, animations: ((Void) -> Void)) {
+    public init(_ duration: Double = 0.25, type: CurveType = .linear, animations: @escaping ((Void) -> Void)) {
         play(duration, type: type, animations: animations)
     }
     
@@ -41,12 +41,12 @@ public class Jazz {
     }
     
     //queue some animations
-    public func play(duration: Double = 0.25, delay: Double = 0, type: CurveType = .Linear, animations: ((Void) -> Void)) -> Jazz {
+    open func play(_ duration: Double = 0.25, delay: Double = 0, type: CurveType = .linear, animations: @escaping ((Void) -> Void)) -> Jazz {
         var should = false
         if pending.count == 0 {
             should = true
         }
-        pending.append(Pending(duration,.Linear,animations))
+        pending.append(Pending(duration,.linear,animations))
         if should {
             start(pending[0])
         }
@@ -54,8 +54,8 @@ public class Jazz {
     }
     
     //An animation finished running
-    public func delay(time: Double) -> Jazz {
-        let anim = Pending(0,.Linear,{return []})
+    open func delay(_ time: Double) -> Jazz {
+        let anim = Pending(0,.linear,{return []})
         anim.delay = time
         var should = false
         if pending.count == 0 {
@@ -69,30 +69,30 @@ public class Jazz {
     }
     
     //turn a CurveType into the corresponding UIViewAnimationCurve
-    class public func valueForCurve(type: CurveType) -> UIViewAnimationCurve {
+    class open func valueForCurve(_ type: CurveType) -> UIViewAnimationCurve {
         switch type {
-        case .EaseIn: return .EaseIn
-        case .EaseInOut: return .EaseInOut
-        case .EaseOut: return .EaseOut
-        default: return .Linear
+        case .easeIn: return .easeIn
+        case .easeInOut: return .easeInOut
+        case .easeOut: return .easeOut
+        default: return .linear
         }
     }
     
-    class public func timeFunctionForCurve(type: CurveType) -> CAMediaTimingFunction {
+    class open func timeFunctionForCurve(_ type: CurveType) -> CAMediaTimingFunction {
         return CAMediaTimingFunction(name: timingFunctionNameForCurve(type))
     }
     //turn a CurveType into the corresponding UIViewAnimationCurve
-    class private func timingFunctionNameForCurve(type: CurveType) -> String {
+    class fileprivate func timingFunctionNameForCurve(_ type: CurveType) -> String {
         switch type {
-        case .EaseIn: return kCAMediaTimingFunctionEaseIn
-        case .EaseInOut: return kCAMediaTimingFunctionEaseInEaseOut
-        case .EaseOut: return kCAMediaTimingFunctionEaseOut
+        case .easeIn: return kCAMediaTimingFunctionEaseIn
+        case .easeInOut: return kCAMediaTimingFunctionEaseInEaseOut
+        case .easeOut: return kCAMediaTimingFunctionEaseOut
         default: return kCAMediaTimingFunctionLinear
         }
     }
     
     //create a basic animation from the standard properties
-    class public func createAnimation(duration: CFTimeInterval = CATransaction.animationDuration(),
+    class open func createAnimation(_ duration: CFTimeInterval = CATransaction.animationDuration(),
         type: CAMediaTimingFunction = Jazz.timingFunction(), key: String) -> CABasicAnimation {
         let animation = CABasicAnimation(keyPath: key)
         animation.duration = duration
@@ -102,7 +102,7 @@ public class Jazz {
     }
     
     //get the timing function or use the default one
-    class public func timingFunction() -> CAMediaTimingFunction {
+    class open func timingFunction() -> CAMediaTimingFunction {
             if let type = CATransaction.animationTimingFunction() {
                 return type
             }
@@ -110,20 +110,20 @@ public class Jazz {
     }
     
     //creates a random key that is for a single animation
-    class public func oneShotKey() -> String {
+    class open func oneShotKey() -> String {
         let letters = "abcdefghijklmnopqurstuvwxyz"
         var str = ""
         for _ in 0 ..< 14 {
             let start = Int(arc4random() % 14)
-            str.append(letters[letters.startIndex.advancedBy(start)])
+            str.append(letters[letters.characters.index(letters.startIndex, offsetBy: start)])
         }
         return "vluxe\(str)"
     }
     
     //private method that actually runs the animation
-    private func start(current: Pending) {
+    fileprivate func start(_ current: Pending) {
         if let d = current.delay {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(d * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(d * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) {
                 self.doFinish()
             }
         } else {
@@ -139,8 +139,8 @@ public class Jazz {
     }
     
     //finish a pending animation
-    private func doFinish() {
-        pending.removeAtIndex(0)
+    fileprivate func doFinish() {
+        pending.remove(at: 0)
         if pending.count > 0 {
             start(pending[0])
         }
@@ -151,7 +151,7 @@ public class Jazz {
     ///Public class methods to manipulate views
     
     ///Change the frame of a view
-    public class func updateFrame(view :UIView, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) {
+    open class func updateFrame(_ view :UIView, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) {
         var fr = view.frame
         fr.origin.x = x
         fr.origin.y = y
@@ -161,17 +161,17 @@ public class Jazz {
     }
     
     //move the view around
-    public class func moveView(view :UIView, x: CGFloat, y: CGFloat) {
+    open class func moveView(_ view :UIView, x: CGFloat, y: CGFloat) {
         updateFrame(view, x: x, y: y, width: view.frame.size.width, height: view.frame.size.height)
     }
     
     //change the size of the view
-    public class func resizeView(view :UIView, width: CGFloat, height: CGFloat) {
+    open class func resizeView(_ view :UIView, width: CGFloat, height: CGFloat) {
         updateFrame(view, x: view.frame.origin.x, y: view.frame.origin.y, width: width, height: height)
     }
     
     //expand the size of the view
-    public class func expandView(view :UIView, scale: CGFloat) {
+    open class func expandView(_ view :UIView, scale: CGFloat) {
         let w = view.frame.size.width*scale
         let h = view.frame.size.height*scale
         let x = view.frame.origin.x - (w - view.frame.size.width)/2
@@ -180,11 +180,11 @@ public class Jazz {
     }
     
     //rotate the view
-    public class func rotateView(view: UIView, degrees: CGFloat) {
-        view.transform = CGAffineTransformRotate(view.transform, degreesToRadians(degrees));
+    open class func rotateView(_ view: UIView, degrees: CGFloat) {
+        view.transform = view.transform.rotated(by: degreesToRadians(degrees));
     }
     
-    public class func degreesToRadians(degrees: CGFloat) -> CGFloat {
+    open class func degreesToRadians(_ degrees: CGFloat) -> CGFloat {
         return ((3.14159265359 * degrees)/180)
     }
 }
