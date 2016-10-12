@@ -41,7 +41,7 @@ open class Jazz {
     }
     
     //queue some animations
-    open func play(_ duration: Double = 0.25, delay: Double = 0, type: CurveType = .linear, animations: @escaping ((Void) -> Void)) -> Jazz {
+    @discardableResult open func play(_ duration: Double = 0.25, delay: Double = 0, type: CurveType = .linear, animations: @escaping ((Void) -> Void)) -> Jazz {
         var should = false
         if pending.count == 0 {
             should = true
@@ -54,8 +54,8 @@ open class Jazz {
     }
     
     //An animation finished running
-    open func delay(_ time: Double) -> Jazz {
-        let anim = Pending(0,.linear,{return []})
+    @discardableResult open func delay(_ time: Double) -> Jazz {
+        let anim = Pending(0,.linear,{})
         anim.delay = time
         var should = false
         if pending.count == 0 {
