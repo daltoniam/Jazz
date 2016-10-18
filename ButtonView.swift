@@ -18,7 +18,7 @@ open class ButtonView: ShapeView {
         }
     }
     open var ripple = false
-    var didTap: ((Void) -> Void)?
+    open var didTap: ((Void) -> Void)?
     
     //standard view init method
     override public init(frame: CGRect) {
