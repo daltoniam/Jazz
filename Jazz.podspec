@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Jazz"
-  s.version      = "2.0.0"
+  s.version      = "2.0.1"
   s.summary      = "Easier layer animations in Swift"
   s.homepage     = "https://github.com/daltoniam/Jazz"
   s.license      = 'Apache License, Version 2.0'
