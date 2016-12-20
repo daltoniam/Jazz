@@ -7,15 +7,15 @@
 
 import UIKit
 
-open class ShapePath {
-    var bezier: UIBezierPath
-    var radius: CGFloat
-    var rect: CGRect
-    var corners: UIRectCorner
-    open var frame: CGRect{ return rect}
-    open var borderWidth: CGFloat{ return bezier.lineWidth}
-    open var path: CGPath {return bezier.cgPath}
-    open var cornerRadius: CGFloat {return radius}
+public struct ShapePath {
+    public let bezier: UIBezierPath
+    public let radius: CGFloat
+    public let rect: CGRect
+    public let corners: UIRectCorner
+    public var frame: CGRect{ return rect}
+    public var borderWidth: CGFloat{ return bezier.lineWidth}
+    public var path: CGPath {return bezier.cgPath}
+    public var cornerRadius: CGFloat {return radius}
     
     //frame is the frame of the shape
     //corners is which corners on the shape to round (bottom left, top right, etc)
@@ -38,20 +38,21 @@ open class ShapePath {
     }
     
     //create a new ShapePath with an updated frame
-    open func newFrame(_ frame: CGRect) -> ShapePath {
+    public func newFrame(_ frame: CGRect) -> ShapePath {
         return ShapePath(frame: frame, corners: corners, cornerRadius: cornerRadius, borderWidth: borderWidth)
     }
 }
 
 
-class ShapeLayer : CAShapeLayer {
-    let keys = ["path": 0, "fillColor": 0, "borderColor": 0, "borderWidth": 0, "cornerRadius": 0]
-    override class func needsDisplay(forKey key: String) -> Bool {
+open class ShapeLayer : CAShapeLayer {
+    var keys = ["path": 0, "fillColor": 0, "borderColor": 0, "borderWidth": 0, "cornerRadius": 0]
+    
+    override open class func needsDisplay(forKey key: String) -> Bool {
         return super.needsDisplay(forKey: key)
     }
     
-    override func action(forKey event: String) -> CAAction? {
-
+    override open func action(forKey event: String) -> CAAction? {
+        
         if (keys[event] != nil) {
             if let action = super.action(forKey: "backgroundColor") as? CABasicAnimation {
                 let animation = CABasicAnimation(keyPath: event)

@@ -46,9 +46,14 @@ open class LoadingView : UIView, CAAnimationDelegate {
         }
     }
     
-     override open var frame: CGRect {
+    override open var frame: CGRect {
         willSet {
             layer.transform = CATransform3DIdentity
+        }
+        didSet {
+            if let last = poses.last, isRunning {
+                layer.transform = CATransform3DMakeRotation(Jazz.degreesToRadians(last.rotationDegrees), 0, 0, 1)
+            }
         }
     }
     
