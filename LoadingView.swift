@@ -57,6 +57,16 @@ open class LoadingView : UIView, CAAnimationDelegate {
         }
     }
     
+    override open var isHidden: Bool {
+        get {
+            return super.isHidden
+        }
+        set(v) {
+            super.isHidden = v
+            stop()
+        }
+    }
+    
     //NOTE!!!
     //The startPoint and progress properties should not be used at the same time as the start and stop methods. It just doesn't make sense.
     open var startPoint: CGFloat = 270
@@ -194,5 +204,14 @@ open class LoadingView : UIView, CAAnimationDelegate {
     //set the layer of this view to be a shape
     open override class var layerClass : AnyClass {
         return CAShapeLayer.self
+    }
+    
+    open override func removeFromSuperview() {
+        super.removeFromSuperview()
+        stop()
+    }
+    
+    deinit {
+        stop()
     }
 }
