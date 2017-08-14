@@ -63,7 +63,9 @@ open class LoadingView : UIView, CAAnimationDelegate {
         }
         set(v) {
             super.isHidden = v
-            stop()
+            if v {
+                stop()
+            }
         }
     }
     
