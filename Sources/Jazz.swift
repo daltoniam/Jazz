@@ -16,11 +16,11 @@ public enum CurveType {
 
 class Pending {
     let duration: Double
-    let animations: ((Void) -> Void)
+    let animations: (() -> Void)
     let type: CurveType
     var delay: Double?
     
-    init(_ duration: Double, _ type: CurveType = .linear, _ animations: @escaping ((Void) -> Void)) {
+    init(_ duration: Double, _ type: CurveType = .linear, _ animations: @escaping (() -> Void)) {
         self.duration = duration
         self.animations = animations
         self.type = type
@@ -32,7 +32,7 @@ open class Jazz {
     
     
     //convenience that starts the running
-    public init(_ duration: Double = 0.25, type: CurveType = .linear, animations: @escaping ((Void) -> Void)) {
+    public init(_ duration: Double = 0.25, type: CurveType = .linear, animations: @escaping (() -> Void)) {
         play(duration, type: type, animations: animations)
     }
     
@@ -41,7 +41,7 @@ open class Jazz {
     }
     
     //queue some animations
-    @discardableResult open func play(_ duration: Double = 0.25, delay: Double = 0, type: CurveType = .linear, animations: @escaping ((Void) -> Void)) -> Jazz {
+    @discardableResult open func play(_ duration: Double = 0.25, delay: Double = 0, type: CurveType = .linear, animations: @escaping (() -> Void)) -> Jazz {
         var should = false
         if pending.count == 0 {
             should = true

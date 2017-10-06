@@ -87,7 +87,7 @@ open class LoadingView : UIView, CAAnimationDelegate {
     
     var isRunning = false
     var needsRefresh = false
-    var didStop: ((Void) -> Void)?
+    var didStop: (() -> Void)?
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
@@ -114,7 +114,7 @@ open class LoadingView : UIView, CAAnimationDelegate {
     }
     
     //stop the animation
-    open func stop(_ completion: ((Void) -> Void)? = nil) {
+    open func stop(_ completion: (() -> Void)? = nil) {
         isRunning = false
         didStop = completion
     }
